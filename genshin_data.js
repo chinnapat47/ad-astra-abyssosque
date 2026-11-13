@@ -939,32 +939,6 @@ window.GENSHIN_WIKI_DB = {
       "popularity": 85
     },
     {
-      "name": "Manekin",
-      "aliases": [
-        "——"
-      ],
-      "element": "None",
-      "weapon": "Sword",
-      "region": "Unknown",
-      "rarity": 5,
-      "substat": "ATK",
-      "affiliation": "——",
-      "popularity": 80
-    },
-    {
-      "name": "Manekina",
-      "aliases": [
-        "——"
-      ],
-      "element": "None",
-      "weapon": "Sword",
-      "region": "Unknown",
-      "rarity": 5,
-      "substat": "ATK",
-      "affiliation": "——",
-      "popularity": 87
-    },
-    {
       "name": "Mavuika",
       "aliases": [
         "night-igniting flame",
@@ -5714,9 +5688,7 @@ window.GENSHIN_WIKI_DB = {
     },
     {
       "name": "Juvenile Tree Segment",
-      "aliases": [
-        "rugged elder leshy"
-      ],
+      "aliases": [],
       "category": "Enemy",
       "enemyGroup": "Mystical Beasts",
       "popularity": 55
@@ -6419,9 +6391,7 @@ window.GENSHIN_WIKI_DB = {
     },
     {
       "name": "Rugged Elder Leshy",
-      "aliases": [
-        "juvenile tree segment"
-      ],
+      "aliases": [],
       "category": "Enemy",
       "enemyGroup": "Mystical Beasts",
       "popularity": 55
@@ -6879,9 +6849,7 @@ window.GENSHIN_WIKI_DB = {
     },
     {
       "name": "The Doctor",
-      "aliases": [
-        "il dottore"
-      ],
+      "aliases": [],
       "category": "World Boss",
       "enemyGroup": "Enemies of Note",
       "popularity": 55
