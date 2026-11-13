@@ -27,6 +27,19 @@ function calcPopularity(item, categoryType) {
   return Math.max(1, Math.min(99, base + variance));
 }
 
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+function birthMonthOf(c) {
+  if (c.birthdaymmdd) {
+    const m = parseInt(String(c.birthdaymmdd).padStart(4, '0').slice(0, 2), 10);
+    if (m >= 1 && m <= 12) return m;
+  }
+  if (typeof c.birthday === 'string') {
+    const i = MONTHS.findIndex(n => c.birthday.includes(n));
+    if (i >= 0) return i + 1;
+  }
+  return null;
+}
+
 // 1. Characters
 const characters = safeGetNames('characters').map(name => {
   try {
@@ -41,6 +54,7 @@ const characters = safeGetNames('characters').map(name => {
       rarity: Number(c.rarity) || 4,
       substat: c.substatText || 'None',
       affiliation: c.affiliation || 'None',
+      birthMonth: birthMonthOf(c),
       popularity: calcPopularity(c, 'char')
     };
   } catch (e) { return null; }

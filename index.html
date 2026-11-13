@@ -782,14 +782,18 @@
       };
     }
 
-    function getTodayUTCString() {
-      const now = new Date();
-      const yyyy = now.getFullYear();
-      const mm = String(now.getMonth() + 1).padStart(2, '0');
-      const dd = String(now.getDate()).padStart(2, '0');
-      return `${yyyy}-${mm}-${dd}`;
+    // One fixed time zone for everybody, so the Daily puzzle and its midnight reset are identical worldwide.
+    const DAILY_TIMEZONE = "Asia/Bangkok";
+    function getTodayUTCString() { // name kept for compatibility: returns YYYY-MM-DD in DAILY_TIMEZONE
+      return new Intl.DateTimeFormat("en-CA", { timeZone: DAILY_TIMEZONE, year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
+    }
+    function secondsToNextDive() {
+      const parts = new Intl.DateTimeFormat("en-GB", { timeZone: DAILY_TIMEZONE, hour: "2-digit", minute: "2-digit", second: "2-digit", hourCycle: "h23" }).formatToParts(new Date());
+      const g = (t) => Number(parts.find(x => x.type === t).value);
+      return 86400 - (g("hour") * 3600 + g("minute") * 60 + g("second"));
     }
 
+    const MIN_POOL = 8; // prompts with fewer valid answers than this are skipped (too guessable / unfair)
     function buildCandidatePrompts() {
       const candidates = [];
       const regions = ["Mondstadt", "Liyue", "Inazuma", "Sumeru", "Fontaine", "Natlan", "Nod-Krai", "Snezhnaya"];
@@ -800,7 +804,7 @@
       // Template 1: Name a {region} character
       regions.forEach(region => {
         const pool = GENSHIN_DB.characters.filter(c => c.region === region || (c.altRegions || []).includes(region));
-        if (pool.length >= 4) {
+        if (pool.length >= MIN_POOL) {
           candidates.push({ id: `reg_${region}`, text: `Name a ${region} character`, pool });
         }
       });
@@ -808,7 +812,7 @@
       // Template 2: Name a {element} character
       elements.forEach(el => {
         const pool = GENSHIN_DB.characters.filter(c => c.element === el);
-        if (pool.length >= 4) {
+        if (pool.length >= MIN_POOL) {
           const article = (el === "Anemo" || el === "Electro") ? "an" : "a";
           candidates.push({ id: `el_${el}`, text: `Name ${article} ${el} character`, pool });
         }
@@ -817,7 +821,7 @@
       // Template 3: Name a {weapon} user
       weapons.forEach(wp => {
         const pool = GENSHIN_DB.characters.filter(c => c.weapon === wp);
-        if (pool.length >= 4) {
+        if (pool.length >= MIN_POOL) {
           candidates.push({ id: `wp_${wp}`, text: `Name a ${wp} user`, pool });
         }
       });
@@ -826,7 +830,7 @@
       rarities.forEach(r => {
         elements.forEach(el => {
           const pool = GENSHIN_DB.characters.filter(c => c.rarity === r && c.element === el);
-          if (pool.length >= 4) {
+          if (pool.length >= MIN_POOL) {
             candidates.push({ id: `r_el_${r}_${el}`, text: `Name a ${r}-star ${el} character`, pool });
           }
         });
@@ -836,7 +840,7 @@
       regions.forEach(reg => {
         weapons.forEach(wp => {
           const pool = GENSHIN_DB.characters.filter(c => (c.region === reg || (c.altRegions || []).includes(reg)) && c.weapon === wp);
-          if (pool.length >= 4) {
+          if (pool.length >= MIN_POOL) {
             candidates.push({ id: `reg_wp_${reg}_${wp}`, text: `Name a ${reg} ${wp} user`, pool });
           }
         });
@@ -846,7 +850,7 @@
       rarities.forEach(r => {
         weapons.forEach(wp => {
           const pool = GENSHIN_DB.weapons.filter(w => w.rarity === r && w.type === wp);
-          if (pool.length >= 4) {
+          if (pool.length >= MIN_POOL) {
             candidates.push({ id: `wp_r_${r}_${wp}`, text: `Name a ${r}-star ${wp} (Weapon)`, pool });
           }
         });
@@ -855,7 +859,7 @@
       // Template 7: Name a {region} Local Specialty
       regions.forEach(reg => {
         const pool = GENSHIN_DB.worldAndGear.filter(i => i.category === "Local Specialty" && i.region === reg);
-        if (pool.length >= 4) {
+        if (pool.length >= MIN_POOL) {
           candidates.push({ id: `spec_${reg}`, text: `Name a ${reg} Local Specialty`, pool });
         }
       });
@@ -863,7 +867,7 @@
       // Template 8: Name a {category} (Weekly Boss / Artifact Set)
       ["Artifact Set", "Weekly Boss", "Fatui Harbinger"].forEach(cat => {
         const pool = GENSHIN_DB.worldAndGear.filter(i => i.category === cat);
-        if (pool.length >= 4) {
+        if (pool.length >= MIN_POOL) {
           const article = cat === "Artifact Set" ? "an" : "a";
           candidates.push({ id: `cat_${cat}`, text: `Name ${article} ${cat}`, pool });
         }
@@ -874,7 +878,7 @@
       substats.forEach(sub => {
         if (sub === "None") return;
         const pool = GENSHIN_DB.characters.filter(c => c.substat === sub);
-        if (pool.length >= 4) {
+        if (pool.length >= MIN_POOL) {
           candidates.push({ id: `char_sub_${sub}`, text: `Name a character who ascends with ${sub}`, pool });
         }
       });
@@ -884,7 +888,7 @@
       affiliations.forEach(aff => {
         if (aff === "None") return;
         const pool = GENSHIN_DB.characters.filter(c => c.affiliation === aff);
-        if (pool.length >= 4) {
+        if (pool.length >= MIN_POOL) {
           candidates.push({ id: `char_aff_${aff}`, text: `Name a character affiliated with ${aff}`, pool });
         }
       });
@@ -893,13 +897,13 @@
       const wpSubstats = [...new Set(GENSHIN_DB.weapons.map(w => w.substat).filter(Boolean))];
       weapons.forEach(wp => {
         const pool3 = GENSHIN_DB.weapons.filter(w => w.rarity === 3 && w.type === wp);
-        if (pool3.length >= 4) {
+        if (pool3.length >= MIN_POOL) {
           candidates.push({ id: `wp_r_3_${wp}`, text: `Name a 3-star ${wp} (Weapon)`, pool: pool3 });
         }
         wpSubstats.forEach(sub => {
           if (sub === "None") return;
           const pool = GENSHIN_DB.weapons.filter(w => w.type === wp && w.substat === sub);
-          if (pool.length >= 4) {
+          if (pool.length >= MIN_POOL) {
             candidates.push({ id: `wp_sub_${wp}_${sub}`, text: `Name a ${wp} with a ${sub} substat`, pool });
           }
         });
@@ -908,7 +912,7 @@
       // Template 12: หมวดหมู่ใหม่ใน World & Gear (Bosses, Enemies, Foods, Specialty Dishes, Domains)
       ["World Boss", "Enemy", "Character Specialty Dish", "Teyvat Food", "Domain"].forEach(cat => {
         const pool = GENSHIN_DB.worldAndGear.filter(i => i.category === cat);
-        if (pool.length >= 4) {
+        if (pool.length >= MIN_POOL) {
           candidates.push({ id: `wag_cat_${cat}`, text: `Name a ${cat}`, pool });
         }
       });
@@ -917,18 +921,30 @@
       const enemyGroups = [...new Set(GENSHIN_DB.worldAndGear.filter(i => i.category === "Enemy").map(i => i.enemyGroup).filter(Boolean))];
       enemyGroups.forEach(grp => {
         const pool = GENSHIN_DB.worldAndGear.filter(i => i.category === "Enemy" && i.enemyGroup === grp);
-        if (pool.length >= 4) {
+        if (pool.length >= MIN_POOL) {
           candidates.push({ id: `enemy_grp_${grp}`, text: `Name an enemy from the "${grp}" category`, pool });
         }
       });
 
       regions.forEach(reg => {
         const pool = GENSHIN_DB.worldAndGear.filter(i => i.category === "Domain" && i.region === reg);
-        if (pool.length >= 4) {
+        if (pool.length >= MIN_POOL) {
           candidates.push({ id: `dom_reg_${reg}`, text: `Name a Domain in ${reg}`, pool });
         }
       });
       // --- จบส่วนที่เพิ่มใหม่ ---
+      // Template 14: random trivia (name starts with a letter / birthday month)
+      const startsWith = (list, L) => list.filter(i => i.name.charAt(0).toUpperCase() === L);
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").forEach(L => {
+        const cp = startsWith(GENSHIN_DB.characters, L);
+        if (cp.length >= MIN_POOL) candidates.push({ id: `trivia_chr_${L}`, text: `Name a character whose name starts with "${L}"`, pool: cp });
+        const wp = startsWith(GENSHIN_DB.weapons, L);
+        if (wp.length >= MIN_POOL * 2) candidates.push({ id: `trivia_wpn_${L}`, text: `Name a weapon whose name starts with "${L}"`, pool: wp });
+      });
+      ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"].forEach((mn, idx) => {
+        const pool = GENSHIN_DB.characters.filter(c => Number(c.birthMonth) === idx + 1);
+        if (pool.length >= MIN_POOL) candidates.push({ id: `trivia_bday_${idx + 1}`, text: `Name a character born in ${mn}`, pool });
+      });
       return candidates;
     }
 
@@ -936,14 +952,24 @@
       const rng = seedString ? mulberry32(stringToSeed(seedString)) : Math.random;
       const allCandidates = buildCandidatePrompts();
 
-      // Fisher-Yates shuffle with our RNG
-      const shuffled = [...allCandidates];
-      for (let i = shuffled.length - 1; i > 0; i--) {
-        const j = Math.floor(rng() * (i + 1));
-        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      // Weighted pick of 7 prompts: favour core trivia (characters, weapons, artifacts), allow max 2 per kind
+      const KIND_W = { reg: 3, el: 3, wp: 3, r: 3, spec: 2, cat: 3, char: 2, trivia: 3, wag: 1, enemy: 1, dom: 1 };
+      const kindOf = (id) => id.split("_")[0];
+      const bag = [...allCandidates], picks = [], kc = {}, perKind = {};
+      allCandidates.forEach(c => { perKind[kindOf(c.id)] = (perKind[kindOf(c.id)] || 0) + 1; });
+      while (picks.length < 7 && bag.length) {
+        // each kind gets its weight split across its prompts, so big kinds (trivia, weapons) don't swamp the rest
+        let ws = bag.map(c => ((kc[kindOf(c.id)] || 0) >= 2 ? 0 : (KIND_W[kindOf(c.id)] || 1) / perKind[kindOf(c.id)]));
+        let tot = ws.reduce((a, b) => a + b, 0);
+        if (tot === 0) { ws = ws.map(() => 1); tot = ws.length; }
+        let r = rng() * tot, i = 0;
+        for (; i < ws.length - 1; i++) { r -= ws[i]; if (r <= 0) break; }
+        const c = bag.splice(i, 1)[0];
+        picks.push(c);
+        kc[kindOf(c.id)] = (kc[kindOf(c.id)] || 0) + 1;
       }
 
-      const selected = shuffled.slice(0, 7).map(prompt => {
+      const selected = picks.map(prompt => {
         prompt = { ...prompt, text: prompt.text.replace(/^Name a (?=[AEIOU])/, 'Name an ') };
         // Compute simulated pick rate percentages across all valid items in this prompt's pool
         // Using power weighting so obscure answers genuinely land <1.5% and meta answers >20%
@@ -1709,12 +1735,53 @@
     try {
       localStorage.setItem(DAILY_STORAGE_KEY, JSON.stringify({
         date: getTodayUTCString(),
-        names: gameState.history.map(h => ({ guess: h.rawGuess, name: h.matchedItem ? h.matchedItem.name : null }))
+        names: gameState.history.map(h => ({ guess: h.rawGuess, name: h.matchedItem ? h.matchedItem.name : null, pct: h.matchedItem ? h.matchedItem.pickRate : null }))
       }));
     } catch (e) {}
   }
 
-  function startGame(mode) {
+  // ---- Live pick rates (optional backend: see worker/README). Empty string = simulated rates only.
+  const API_BASE = "";
+  const POSTED_KEY = "ABYSSOSQUE_POSTED_V1";
+  async function fetchLiveStats(date) {
+    if (!API_BASE) return null;
+    try {
+      const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), 2500);
+      const r = await fetch(`${API_BASE}/stats?date=${date}`, { signal: ctl.signal });
+      clearTimeout(t);
+      return r.ok ? await r.json() : null;
+    } catch (e) { return null; }
+  }
+  function applyLiveRates(prompts, stats) {
+    const K = 15; // pseudo-answers: simulated rate acts as the prior until real answers pile up
+    prompts.forEach(p => {
+      const st = stats && stats[p.id];
+      if (!st || !st.total) return;
+      p.liveN = st.total;
+      p.pool = p.pool.map(it => {
+        const c = (st.items && st.items[it.name]) || 0;
+        const pct = ((c + K * (it.pickRate / 100)) / (st.total + K)) * 100;
+        return { ...it, pickRate: Number(Math.max(0.1, pct).toFixed(1)) };
+      });
+      const sorted = [...p.pool].sort((a, b) => b.pickRate - a.pickRate);
+      p.mostCommon = sorted[0]; p.rarestPossible = sorted[sorted.length - 1];
+    });
+  }
+  function postAnswer(promptId, itemName) {
+    if (!API_BASE || gameState.mode !== "DAILY" || !itemName) return;
+    try {
+      const date = getTodayUTCString();
+      let posted = JSON.parse(localStorage.getItem(POSTED_KEY) || "null");
+      if (!posted || posted.date !== date) posted = { date, ids: [] };
+      if (posted.ids.includes(promptId)) return;
+      posted.ids.push(promptId);
+      localStorage.setItem(POSTED_KEY, JSON.stringify(posted));
+      fetch(`${API_BASE}/answer`, { method: "POST", keepalive: true, headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ date, promptId, item: itemName }) }).catch(() => {});
+    } catch (e) {}
+  }
+
+  async function startGame(mode) {
     audio.init();
     clearInterval(gameState.timerInterval);
     gameState.mode = mode;
@@ -1728,13 +1795,18 @@
     if (saved && saved.names && saved.names.length === 7) {
       saved.names.forEach((n, i) => {
         const p = gameState.prompts[i];
-        const m = n.name ? p.pool.find(x => x.name === n.name) || null : null;
+        let m = n.name ? p.pool.find(x => x.name === n.name) || null : null;
+        if (m && typeof n.pct === "number") m = { ...m, pickRate: n.pct }; // show the live rate the player actually saw
         const ev = evaluateRarityAndScore(m);
         gameState.totalScore += ev.points;
         gameState.history.push({ promptText: p.text, rawGuess: n.guess, matchedItem: m, evalResult: ev, mostCommon: p.mostCommon, rarestPossible: p.rarestPossible });
       });
       finishGame(true);
       return;
+    }
+    if (mode === "DAILY" && API_BASE) {
+      $("daily-status-note").textContent = "FETCHING TODAY'S PICK RATES…";
+      applyLiveRates(gameState.prompts, await fetchLiveStats(getTodayUTCString()));
     }
     loadPrompt();
   }
@@ -1803,7 +1875,7 @@
     const corrected = !!m && normalizeStr(raw) !== normalizeStr(m.name);
     $("reveal-quoted-guess").style.cssText = corrected ? "text-decoration:line-through;opacity:.55" : "";
     $("reveal-canonical-match").textContent = m
-      ? `${corrected ? "CORRECTED TO" : "IDENTIFIED AS"}: ${m.name.toUpperCase()} • ${m.pickRate}% PICK RATE`
+      ? `${corrected ? "CORRECTED TO" : "IDENTIFIED AS"}: ${m.name.toUpperCase()} • ${m.pickRate}% PICK RATE${p.liveN ? " • " + p.liveN + " DIVERS" : ""}`
       : "NOT A VALID RECORD FOR THIS PROMPT";
     $("reveal-points").style.color = ev.colorHex;
     countUp($("reveal-points"), ev.points, "+", " PTS");
@@ -1823,6 +1895,7 @@
     const ev = evaluateRarityAndScore(m);
     gameState.totalScore += ev.points;
     gameState.history.push({ promptText: p.text, rawGuess: raw, matchedItem: m, evalResult: ev, mostCommon: p.mostCommon, rarestPossible: p.rarestPossible });
+    postAnswer(p.id, m ? m.name : null);
     renderReveal(p, raw, m, ev);
     showPhaseScreen("REVEAL");
     updateHudAndDepthVisuals();
@@ -1913,9 +1986,14 @@
   document.addEventListener("keydown", (e) => { if (e.key === "Enter" && !e.repeat && e.target !== elAnswerInput && gameState.phase === "REVEAL") nextStep(); });
   $("sound-toggle").addEventListener("click", () => { audio.enabled = !audio.enabled; $("sound-toggle").textContent = audio.enabled ? "🔊" : "🔇"; });
 
-  $("daily-status-note").textContent = loadDaily()
-    ? "TODAY'S DIVE IS DONE — TAP DAILY TO REVIEW IT. A NEW ONE ARRIVES AT MIDNIGHT."
-    : `FRESH DIVE FOR ${getTodayUTCString()} IS READY`;
+  const fmtHMS = (s) => [Math.floor(s / 3600), Math.floor(s % 3600 / 60), s % 60].map(n => String(n).padStart(2, "0")).join(":");
+  function updateDailyNote() {
+    if (gameState.phase !== "START") return;
+    $("daily-status-note").textContent = (loadDaily() ? "TODAY'S DIVE IS DONE — TAP DAILY TO REVIEW • " : "FRESH DIVE READY • ") +
+      "NEXT DIVE IN " + fmtHMS(secondsToNextDive()) + " (" + DAILY_TIMEZONE.split("/").pop().toUpperCase() + " TIME)";
+  }
+  updateDailyNote();
+  setInterval(updateDailyNote, 1000);
   showPhaseScreen("START");
   updateHudAndDepthVisuals();
   </script>

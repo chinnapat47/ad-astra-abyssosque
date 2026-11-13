@@ -1,0 +1,8 @@
+name = "ad-astra-abyssosque"
+main = "worker.js"
+compatibility_date = "2025-01-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "abyssosque"
+database_id = "PASTE_ID_FROM_wrangler_d1_create"
