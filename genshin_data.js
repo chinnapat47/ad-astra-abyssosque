@@ -12,6 +12,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 4,
       "substat": "Elemental Mastery",
       "affiliation": "Clink-Clank Krumkake Craftshop",
+      "birthMonth": 9,
       "popularity": 38
     },
     {
@@ -26,6 +27,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "Geo DMG Bonus",
       "affiliation": "Knights of Favonius",
+      "birthMonth": 9,
       "popularity": 73
     },
     {
@@ -40,6 +42,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "Dendro DMG Bonus",
       "affiliation": "Sumeru Akademiya",
+      "birthMonth": 2,
       "popularity": 75
     },
     {
@@ -54,6 +57,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "Cryo DMG Bonus",
       "affiliation": "Wandering Heroine",
+      "birthMonth": 4,
       "popularity": 78
     },
     {
@@ -68,6 +72,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 4,
       "substat": "Energy Recharge",
       "affiliation": "Snezhnaya",
+      "birthMonth": 2,
       "popularity": 40
     },
     {
@@ -82,6 +87,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 4,
       "substat": "ATK",
       "affiliation": "Knights of Favonius",
+      "birthMonth": 8,
       "popularity": 45
     },
     {
@@ -96,6 +102,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "CRIT Rate",
       "affiliation": "Arataki Gang",
+      "birthMonth": 6,
       "popularity": 77
     },
     {
@@ -110,6 +117,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "CRIT DMG",
       "affiliation": "Fatui",
+      "birthMonth": 8,
       "popularity": 82
     },
     {
@@ -124,6 +132,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "HP",
       "affiliation": "Bubu Pharmacy",
+      "birthMonth": 4,
       "popularity": 73
     },
     {
@@ -138,6 +147,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 4,
       "substat": "HP",
       "affiliation": "Church of Favonius",
+      "birthMonth": 7,
       "popularity": 40
     },
     {
@@ -152,6 +162,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 4,
       "substat": "Electro DMG Bonus",
       "affiliation": "The Crux",
+      "birthMonth": 2,
       "popularity": 33
     },
     {
@@ -166,6 +177,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 4,
       "substat": "Energy Recharge",
       "affiliation": "Adventurers' Guild",
+      "birthMonth": 2,
       "popularity": 40
     },
     {
@@ -180,6 +192,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 4,
       "substat": "HP",
       "affiliation": "Aaru Village",
+      "birthMonth": 5,
       "popularity": 40
     },
     {
@@ -194,6 +207,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 4,
       "substat": "ATK",
       "affiliation": "The Steambird",
+      "birthMonth": 4,
       "popularity": 35
     },
     {
@@ -208,6 +222,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "CRIT Rate",
       "affiliation": "Tlalocan",
+      "birthMonth": 12,
       "popularity": 73
     },
     {
@@ -222,6 +237,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 4,
       "substat": "HP",
       "affiliation": "Special Security and Surveillance Patrol",
+      "birthMonth": 1,
       "popularity": 35
     },
     {
@@ -236,6 +252,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "CRIT Rate",
       "affiliation": "Court of Fontaine",
+      "birthMonth": 8,
       "popularity": 73
     },
     {
@@ -250,6 +267,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 4,
       "substat": "ATK",
       "affiliation": "Tianheng Thaumaturges",
+      "birthMonth": 9,
       "popularity": 47
     },
     {
@@ -264,6 +282,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "Elemental Mastery",
       "affiliation": "Mictlan",
+      "birthMonth": 1,
       "popularity": 80
     },
     {
@@ -278,6 +297,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "CRIT Rate",
       "affiliation": "Trial Court",
+      "birthMonth": 9,
       "popularity": 87
     },
     {
@@ -292,6 +312,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 4,
       "substat": "ATK",
       "affiliation": "Gandharva Ville",
+      "birthMonth": 5,
       "popularity": 33
     },
     {
@@ -306,6 +327,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "CRIT Rate",
       "affiliation": "Silvermoon Hall",
+      "birthMonth": 1,
       "popularity": 75
     },
     {
@@ -320,6 +342,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "CRIT DMG",
       "affiliation": "Temple of Silence",
+      "birthMonth": 6,
       "popularity": 78
     },
     {
@@ -334,6 +357,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 4,
       "substat": "HP",
       "affiliation": "Church of Favonius",
+      "birthMonth": 5,
       "popularity": 33
     },
     {
@@ -348,6 +372,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "HP",
       "affiliation": "The Eremites",
+      "birthMonth": 4,
       "popularity": 85
     },
     {
@@ -362,6 +387,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "CRIT Rate",
       "affiliation": "Dawn Winery",
+      "birthMonth": 4,
       "popularity": 85
     },
     {
@@ -376,6 +402,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 4,
       "substat": "Cryo DMG Bonus",
       "affiliation": "The Cat's Tail",
+      "birthMonth": 1,
       "popularity": 45
     },
     {
@@ -390,6 +417,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 4,
       "substat": "HP",
       "affiliation": "The Palace of Alcazarzaray",
+      "birthMonth": 12,
       "popularity": 38
     },
     {
@@ -404,6 +432,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "CRIT DMG",
       "affiliation": "Hexenzirkel",
+      "birthMonth": 3,
       "popularity": 85
     },
     {
@@ -418,6 +447,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "CRIT DMG",
       "affiliation": "Court of Fontaine",
+      "birthMonth": 9,
       "popularity": 73
     },
     {
@@ -432,6 +462,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "CRIT Rate",
       "affiliation": "Fontaine",
+      "birthMonth": 6,
       "popularity": 75
     },
     {
@@ -446,6 +477,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "CRIT DMG",
       "affiliation": "Knights of Favonius",
+      "birthMonth": 10,
       "popularity": 78
     },
     {
@@ -460,6 +492,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 4,
       "substat": "ATK",
       "affiliation": "Haravatat",
+      "birthMonth": 8,
       "popularity": 40
     },
     {
@@ -474,6 +507,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 4,
       "substat": "ATK",
       "affiliation": "Adventurers' Guild",
+      "birthMonth": 5,
       "popularity": 33
     },
     {
@@ -488,6 +522,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "CRIT DMG",
       "affiliation": "Lightkeepers",
+      "birthMonth": 10,
       "popularity": 85
     },
     {
@@ -502,6 +537,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 4,
       "substat": "ATK",
       "affiliation": "Hotel Bouffes d'ete",
+      "birthMonth": 9,
       "popularity": 47
     },
     {
@@ -516,6 +552,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "CRIT Rate",
       "affiliation": "Court of Fontaine",
+      "birthMonth": 10,
       "popularity": 73
     },
     {
@@ -530,6 +567,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 4,
       "substat": "ATK",
       "affiliation": "Sword and Strongbox Secure Transport Agency",
+      "birthMonth": 12,
       "popularity": 33
     },
     {
@@ -544,6 +582,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "CRIT DMG",
       "affiliation": "Yuehai Pavilion",
+      "birthMonth": 12,
       "popularity": 85
     },
     {
@@ -558,6 +597,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 4,
       "substat": "Geo DMG Bonus",
       "affiliation": "Watatsumi Island",
+      "birthMonth": 5,
       "popularity": 45
     },
     {
@@ -572,6 +612,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "CRIT DMG",
       "affiliation": "Wangsheng Funeral Parlor",
+      "birthMonth": 7,
       "popularity": 73
     },
     {
@@ -586,6 +627,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 4,
       "substat": "ATK",
       "affiliation": "Teteocan",
+      "birthMonth": 8,
       "popularity": 33
     },
     {
@@ -600,6 +642,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 4,
       "substat": "Elemental Mastery",
       "affiliation": "Tlalocan",
+      "birthMonth": 3,
       "popularity": 31
     },
     {
@@ -614,6 +657,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 4,
       "substat": "Elemental Mastery",
       "affiliation": "Lightkeepers",
+      "birthMonth": 12,
       "popularity": 33
     },
     {
@@ -628,6 +672,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "CRIT Rate",
       "affiliation": "Clink-Clank Krumkake Craftshop",
+      "birthMonth": 4,
       "popularity": 73
     },
     {
@@ -642,6 +687,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 4,
       "substat": "Healing Bonus",
       "affiliation": "Curatorium of Secrets",
+      "birthMonth": 1,
       "popularity": 33
     },
     {
@@ -656,6 +702,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "Healing Bonus",
       "affiliation": "Knights of Favonius",
+      "birthMonth": 3,
       "popularity": 78
     },
     {
@@ -670,6 +717,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 4,
       "substat": "Geo DMG Bonus",
       "affiliation": "Nanatzcayan",
+      "birthMonth": 4,
       "popularity": 40
     },
     {
@@ -684,6 +732,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "Elemental Mastery",
       "affiliation": "The Crux",
+      "birthMonth": 10,
       "popularity": 86
     },
     {
@@ -698,6 +747,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 4,
       "substat": "Energy Recharge",
       "affiliation": "Knights of Favonius",
+      "birthMonth": 11,
       "popularity": 45
     },
     {
@@ -712,6 +762,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "CRIT DMG",
       "affiliation": "Yashiro Commission",
+      "birthMonth": 9,
       "popularity": 72
     },
     {
@@ -726,6 +777,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "CRIT DMG",
       "affiliation": "Yashiro Commission",
+      "birthMonth": 3,
       "popularity": 72
     },
     {
@@ -740,6 +792,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 4,
       "substat": "Elemental Mastery",
       "affiliation": "Independent Design Studio",
+      "birthMonth": 7,
       "popularity": 45
     },
     {
@@ -754,6 +807,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "CRIT DMG",
       "affiliation": "Liyue Qixing",
+      "birthMonth": 11,
       "popularity": 73
     },
     {
@@ -768,6 +822,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "CRIT DMG",
       "affiliation": "Huitztlan",
+      "birthMonth": 11,
       "popularity": 73
     },
     {
@@ -782,6 +837,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 4,
       "substat": "HP",
       "affiliation": "Komaniya Express",
+      "birthMonth": 1,
       "popularity": 33
     },
     {
@@ -796,6 +852,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "Pyro DMG Bonus",
       "affiliation": "Knights of Favonius",
+      "birthMonth": 7,
       "popularity": 78
     },
     {
@@ -810,6 +867,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 4,
       "substat": "ATK",
       "affiliation": "Tenryou Commission",
+      "birthMonth": 7,
       "popularity": 42
     },
     {
@@ -824,6 +882,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 4,
       "substat": "HP",
       "affiliation": "Arataki Gang",
+      "birthMonth": 7,
       "popularity": 37
     },
     {
@@ -838,6 +897,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 4,
       "substat": "ATK",
       "affiliation": "Chenyu Vale",
+      "birthMonth": 1,
       "popularity": 40
     },
     {
@@ -852,6 +912,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "Elemental Mastery",
       "affiliation": "Frostmoon Scions",
+      "birthMonth": 3,
       "popularity": 85
     },
     {
@@ -866,6 +927,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 4,
       "substat": "HP",
       "affiliation": "Rtawahist",
+      "birthMonth": 12,
       "popularity": 45
     },
     {
@@ -880,6 +942,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "CRIT Rate",
       "affiliation": "Adventurers' Guild",
+      "birthMonth": 5,
       "popularity": 73
     },
     {
@@ -894,6 +957,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 4,
       "substat": "Elemental Mastery",
       "affiliation": "Knights of Favonius",
+      "birthMonth": 6,
       "popularity": 38
     },
     {
@@ -908,6 +972,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "CRIT DMG",
       "affiliation": "Knights of Favonius",
+      "birthMonth": 4,
       "popularity": 85
     },
     {
@@ -922,6 +987,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 4,
       "substat": "Anemo DMG Bonus",
       "affiliation": "Hotel Bouffes d'ete",
+      "birthMonth": 2,
       "popularity": 40
     },
     {
@@ -936,6 +1002,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "CRIT Rate",
       "affiliation": "Hotel Bouffes d'ete",
+      "birthMonth": 2,
       "popularity": 85
     },
     {
@@ -950,6 +1017,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "CRIT DMG",
       "affiliation": "Huitztlan",
+      "birthMonth": 8,
       "popularity": 80
     },
     {
@@ -964,6 +1032,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 4,
       "substat": "HP",
       "affiliation": "Knights of Favonius",
+      "birthMonth": 8,
       "popularity": 38
     },
     {
@@ -978,6 +1047,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "CRIT DMG",
       "affiliation": "Royal Energy Commission of Snezhnaya",
+      "birthMonth": 2,
       "popularity": 85
     },
     {
@@ -992,6 +1062,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "Energy Recharge",
       "affiliation": "Mondstadt",
+      "birthMonth": 8,
       "popularity": 78
     },
     {
@@ -1006,6 +1077,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "CRIT Rate",
       "affiliation": "Meztli",
+      "birthMonth": 8,
       "popularity": 80
     },
     {
@@ -1020,6 +1092,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "Elemental Mastery",
       "affiliation": "Sumeru City",
+      "birthMonth": 10,
       "popularity": 73
     },
     {
@@ -1034,6 +1107,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "CRIT DMG",
       "affiliation": "Spina di Rosula",
+      "birthMonth": 8,
       "popularity": 85
     },
     {
@@ -1048,6 +1122,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "CRIT DMG",
       "affiliation": "Curatorium of Secrets",
+      "birthMonth": 5,
       "popularity": 85
     },
     {
@@ -1062,6 +1137,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "CRIT DMG",
       "affiliation": "Court of Fontaine",
+      "birthMonth": 12,
       "popularity": 70
     },
     {
@@ -1076,6 +1152,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "ATK",
       "affiliation": "Hexenzirkel",
+      "birthMonth": 9,
       "popularity": 73
     },
     {
@@ -1090,6 +1167,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "HP",
       "affiliation": "Zubayr Theater",
+      "birthMonth": 12,
       "popularity": 85
     },
     {
@@ -1104,6 +1182,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 4,
       "substat": "Geo DMG Bonus",
       "affiliation": "Liyue Qixing",
+      "birthMonth": 8,
       "popularity": 35
     },
     {
@@ -1118,6 +1197,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 4,
       "substat": "DEF",
       "affiliation": "Knights of Favonius",
+      "birthMonth": 3,
       "popularity": 33
     },
     {
@@ -1132,6 +1212,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "CRIT DMG",
       "affiliation": "Korolevskiy Troupe",
+      "birthMonth": 2,
       "popularity": 73
     },
     {
@@ -1146,6 +1227,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 4,
       "substat": "ATK",
       "affiliation": "Mictlan",
+      "birthMonth": 10,
       "popularity": 33
     },
     {
@@ -1160,6 +1242,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 4,
       "substat": "ATK",
       "affiliation": "Mondstadt",
+      "birthMonth": 11,
       "popularity": 45
     },
     {
@@ -1174,6 +1257,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "Healing Bonus",
       "affiliation": "Bubu Pharmacy",
+      "birthMonth": 3,
       "popularity": 78
     },
     {
@@ -1188,6 +1272,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "Energy Recharge",
       "affiliation": "Inazuma City",
+      "birthMonth": 6,
       "popularity": 84
     },
     {
@@ -1202,6 +1287,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 4,
       "substat": "Physical DMG Bonus",
       "affiliation": "Wolvendom",
+      "birthMonth": 9,
       "popularity": 45
     },
     {
@@ -1216,6 +1302,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 4,
       "substat": "ATK",
       "affiliation": "Church of Favonius",
+      "birthMonth": 1,
       "popularity": 40
     },
     {
@@ -1230,6 +1317,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "CRIT Rate",
       "affiliation": "Fatui",
+      "birthMonth": 1,
       "popularity": 87
     },
     {
@@ -1244,6 +1332,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "Hydro DMG Bonus",
       "affiliation": "Watatsumi Island",
+      "birthMonth": 2,
       "popularity": 81
     },
     {
@@ -1258,6 +1347,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 4,
       "substat": "Elemental Mastery",
       "affiliation": "Shuumatsuban",
+      "birthMonth": 10,
       "popularity": 38
     },
     {
@@ -1272,6 +1362,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 4,
       "substat": "Elemental Mastery",
       "affiliation": "Temple of Silence",
+      "birthMonth": 5,
       "popularity": 33
     },
     {
@@ -1286,6 +1377,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "ATK",
       "affiliation": "Cloud Retainer's Abode",
+      "birthMonth": 3,
       "popularity": 73
     },
     {
@@ -1300,6 +1392,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 4,
       "substat": "Anemo DMG Bonus",
       "affiliation": "Tenryou Commission",
+      "birthMonth": 7,
       "popularity": 46
     },
     {
@@ -1314,6 +1407,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "HP",
       "affiliation": "Fortress of Meropide",
+      "birthMonth": 3,
       "popularity": 75
     },
     {
@@ -1328,6 +1422,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "CRIT DMG",
       "affiliation": "Cosmic Calamity",
+      "birthMonth": 11,
       "popularity": 85
     },
     {
@@ -1342,6 +1437,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 4,
       "substat": "Anemo DMG Bonus",
       "affiliation": "Knights of Favonius",
+      "birthMonth": 11,
       "popularity": 40
     },
     {
@@ -1356,6 +1452,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "Hydro DMG Bonus",
       "affiliation": "Fatui",
+      "birthMonth": 7,
       "popularity": 75
     },
     {
@@ -1370,6 +1467,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 4,
       "substat": "ATK",
       "affiliation": "Yashiro Commission",
+      "birthMonth": 1,
       "popularity": 45
     },
     {
@@ -1384,6 +1482,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "Dendro DMG Bonus",
       "affiliation": "Gandharva Ville",
+      "birthMonth": 12,
       "popularity": 87
     },
     {
@@ -1398,6 +1497,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 4,
       "substat": "ATK",
       "affiliation": "Fatui Grenadier Guards First Regiment",
+      "birthMonth": 3,
       "popularity": 40
     },
     {
@@ -1412,6 +1512,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "CRIT Rate",
       "affiliation": "Teteocan",
+      "birthMonth": 11,
       "popularity": 73
     },
     {
@@ -1426,6 +1527,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "CRIT DMG",
       "affiliation": "Knights of Favonius",
+      "birthMonth": 2,
       "popularity": 85
     },
     {
@@ -1440,6 +1542,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "Energy Recharge",
       "affiliation": "Mondstadt",
+      "birthMonth": 6,
       "popularity": 85
     },
     {
@@ -1454,6 +1557,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "CRIT Rate",
       "affiliation": "Druzhna",
+      "birthMonth": 2,
       "popularity": 85
     },
     {
@@ -1468,6 +1572,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "HP",
       "affiliation": "Korolevskiy Troupe",
+      "birthMonth": 3,
       "popularity": 82
     },
     {
@@ -1482,6 +1587,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "CRIT Rate",
       "affiliation": "None",
+      "birthMonth": 1,
       "popularity": 87
     },
     {
@@ -1496,6 +1602,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "CRIT DMG",
       "affiliation": "Fortress of Meropide",
+      "birthMonth": 11,
       "popularity": 70
     },
     {
@@ -1510,6 +1617,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 4,
       "substat": "Elemental Mastery",
       "affiliation": "Wanmin Restaurant",
+      "birthMonth": 11,
       "popularity": 35
     },
     {
@@ -1524,6 +1632,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "ATK",
       "affiliation": "Mt. Aocang",
+      "birthMonth": 4,
       "popularity": 80
     },
     {
@@ -1538,6 +1647,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "CRIT Rate",
       "affiliation": "Liyue Adeptus",
+      "birthMonth": 4,
       "popularity": 78
     },
     {
@@ -1552,6 +1662,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "DEF",
       "affiliation": "Nanatzcayan",
+      "birthMonth": 3,
       "popularity": 80
     },
     {
@@ -1566,6 +1677,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 4,
       "substat": "ATK",
       "affiliation": "Feiyun Commerce Guild",
+      "birthMonth": 10,
       "popularity": 40
     },
     {
@@ -1580,6 +1692,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 4,
       "substat": "ATK",
       "affiliation": "\"The Red Strings\"",
+      "birthMonth": 10,
       "popularity": 33
     },
     {
@@ -1594,6 +1707,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "CRIT Rate",
       "affiliation": "Grand Narukami Shrine",
+      "birthMonth": 6,
       "popularity": 87
     },
     {
@@ -1608,6 +1722,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 4,
       "substat": "Pyro DMG Bonus",
       "affiliation": "Yanfei Legal Consultancy",
+      "birthMonth": 7,
       "popularity": 33
     },
     {
@@ -1622,6 +1737,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 4,
       "substat": "HP",
       "affiliation": "Streetward Rambler's Abode",
+      "birthMonth": 3,
       "popularity": 33
     },
     {
@@ -1636,6 +1752,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "CRIT Rate",
       "affiliation": "Yanshang Teahouse",
+      "birthMonth": 4,
       "popularity": 85
     },
     {
@@ -1650,6 +1767,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "CRIT Rate",
       "affiliation": "Naganohara Fireworks",
+      "birthMonth": 6,
       "popularity": 80
     },
     {
@@ -1664,6 +1782,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "Elemental Mastery",
       "affiliation": "Inazuma",
+      "birthMonth": 3,
       "popularity": 74
     },
     {
@@ -1678,6 +1797,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 4,
       "substat": "Energy Recharge",
       "affiliation": "Yun-Han Opera Troupe",
+      "birthMonth": 5,
       "popularity": 40
     },
     {
@@ -1692,6 +1812,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "Geo DMG Bonus",
       "affiliation": "Liyue Harbor",
+      "birthMonth": 12,
       "popularity": 80
     },
     {
@@ -1706,6 +1827,7 @@ window.GENSHIN_WIKI_DB = {
       "rarity": 5,
       "substat": "CRIT DMG",
       "affiliation": "Liyue Harbor",
+      "birthMonth": 5,
       "popularity": 85
     }
   ],
