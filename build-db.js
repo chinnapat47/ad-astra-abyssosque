@@ -1,140 +1,158 @@
 const genshin = require('genshin-db');
 const fs = require('fs');
 
-// ฟังก์ชันคำนวณความนิยมอัตโนมัติ (เพื่อให้ตัวละคร/ไอเทมลับได้เรต <1.5% Miracle)
+function safeGetNames(fnName) {
+  try {
+    if (typeof genshin[fnName] !== 'function') return [];
+    return genshin[fnName]('names', { matchCategories: true }) || [];
+  } catch (e) {
+    return [];
+  }
+}
+
 function calcPopularity(item, categoryType) {
   let base = 40;
-  if (item.rarity === 5 || item.rarity === '5') base = 78;
-  else if (item.rarity === 4 || item.rarity === '4') base = 38;
-  else if (item.rarity === 3 || item.rarity === '3') base = 12;
-  else if (item.rarity === 2 || item.rarity === '2') base = 5;
-  else if (item.rarity === 1 || item.rarity === '1') base = 2;
+  const r = Number(item.rarity);
+  if (r === 5) base = 78;
+  else if (r === 4) base = 38;
+  else if (r === 3) base = 12;
+  else if (r === 2) base = 5;
+  else if (r === 1) base = 2;
 
-  // อาวุธจากกิจกรรมจำกัดเวลา หรือของหายาก ให้ลดค่าความนิยมลงเพื่อให้ติด Miracle ง่ายขึ้น
-  if (categoryType === 'weapon' && item.rarity == 4 && item.substatText === 'DEF') base = 6;
-  if (categoryType === 'food' && item.specialty) base = 4; // อาหารจานพิเศษของตัวละคร
+  if (categoryType === 'weapon' && r === 4 && item.substatText === 'DEF') base = 6;
+  if (categoryType === 'food' && (item.characterName || item.specialty)) base = 4;
 
-  // กระจายค่าเล็กน้อยตามความยาวชื่อไม่ให้เลขซ้ำกันเกินไป
-  const variance = (item.name.length * 7) % 19 - 9;
+  const nameStr = item.name || '';
+  const variance = (nameStr.length * 7) % 19 - 9;
   return Math.max(1, Math.min(99, base + variance));
 }
 
-// 1. ดึงข้อมูลตัวละครทั้งหมด
-const charNames = genshin.characters('names', { matchCategories: true });
-const characters = charNames.map(name => {
-  const c = genshin.characters(name);
-  if (!c || c.name === 'Aether' || c.name === 'Lumine') return null;
-  return {
-    name: c.name,
-    aliases: [c.title, c.constellation].filter(Boolean).map(s => s.toLowerCase()),
-    element: c.elementText || 'None',
-    weapon: c.weaponText || 'Unknown',
-    region: c.region || 'Unknown',
-    rarity: Number(c.rarity) || 4,
-    substat: c.substatText || 'None',
-    affiliation: c.affiliation || 'None',
-    birthMonth: c.birthdaymmdd ? c.birthdaymmdd.split('/')[0] : null,
-    popularity: calcPopularity(c, 'char')
-  };
+// 1. Characters
+const characters = safeGetNames('characters').map(name => {
+  try {
+    const c = genshin.characters(name);
+    if (!c || !c.name || c.name === 'Aether' || c.name === 'Lumine') return null;
+    return {
+      name: c.name,
+      aliases: [c.title, c.constellation].filter(Boolean).map(s => String(s).toLowerCase()),
+      element: c.elementText || 'None',
+      weapon: c.weaponText || 'Unknown',
+      region: c.region || 'Unknown',
+      rarity: Number(c.rarity) || 4,
+      substat: c.substatText || 'None',
+      affiliation: c.affiliation || 'None',
+      popularity: calcPopularity(c, 'char')
+    };
+  } catch (e) { return null; }
 }).filter(Boolean);
 
-// 2. ดึงข้อมูลอาวุธทั้งหมด (3 ดาว - 5 ดาว)
-const weaponNames = genshin.weapons('names', { matchCategories: true });
-const weapons = weaponNames.map(name => {
-  const w = genshin.weapons(name);
-  if (!w || Number(w.rarity) < 3) return null;
-  return {
-    name: w.name,
-    aliases: [],
-    type: w.weaponText,
-    rarity: Number(w.rarity),
-    substat: w.substatText || 'None',
-    popularity: calcPopularity(w, 'weapon')
-  };
+// 2. Weapons
+const weapons = safeGetNames('weapons').map(name => {
+  try {
+    const w = genshin.weapons(name);
+    if (!w || !w.name || Number(w.rarity) < 3) return null;
+    return {
+      name: w.name,
+      aliases: [],
+      type: w.weaponText || 'Sword',
+      rarity: Number(w.rarity) || 4,
+      substat: w.substatText || 'None',
+      popularity: calcPopularity(w, 'weapon')
+    };
+  } catch (e) { return null; }
 }).filter(Boolean);
 
-// 3. ดึงข้อมูล World, Gear, Enemies, Foods, Domains, Materials
+// 3. World & Gear
 const worldAndGear = [];
 
-// 3.1 Artifact Sets
-genshin.artifacts('names', { matchCategories: true }).forEach(name => {
-  const a = genshin.artifacts(name);
-  if (a) {
-    worldAndGear.push({
-      name: a.name,
-      aliases: [],
-      category: 'Artifact Set',
-      rarity: Math.max(...(a.rarityList || [4])),
-      popularity: a.rarityList && a.rarityList.includes(5) ? 65 : 8
-    });
-  }
-});
-
-// 3.2 Enemies & Bosses
-genshin.enemies('names', { matchCategories: true }).forEach(name => {
-  const e = genshin.enemies(name);
-  if (e) {
-    const isBoss = e.enemyType === 'BOSS' || e.categoryText === 'Mystical Beasts' || e.categoryText === 'Abyss';
-    worldAndGear.push({
-      name: e.name,
-      aliases: e.specialNames ? e.specialNames.slice(0, 2).map(s => s.toLowerCase()) : [],
-      category: e.enemyType === 'BOSS' ? 'World Boss' : 'Enemy',
-      enemyGroup: e.categoryText || 'Other',
-      popularity: isBoss ? 55 : 18
-    });
-  }
-});
-
-// 3.3 Foods & Specialty Dishes
-genshin.foods('names', { matchCategories: true }).forEach(name => {
-  const f = genshin.foods(name);
-  if (f) {
-    worldAndGear.push({
-      name: f.name,
-      aliases: [],
-      category: f.characterName ? 'Character Specialty Dish' : 'Teyvat Food',
-      foodType: f.filterText || 'Dish',
-      rarity: Number(f.rarity) || 3,
-      popularity: calcPopularity(f, 'food')
-    });
-  }
-});
-
-// 3.4 Domains
-genshin.domains('names', { matchCategories: true }).forEach(name => {
-  const d = genshin.domains(name);
-  if (d) {
-    // ตัดเลขโรมัน I, II, III, IV ท้ายชื่อดันเจี้ยนออกเพื่อไม่ให้ซ้ำ
-    const cleanName = d.name.replace(/\s+(I|II|III|IV)$/i, '').trim();
-    if (!worldAndGear.some(item => item.name === cleanName && item.category === 'Domain')) {
+safeGetNames('artifacts').forEach(name => {
+  try {
+    const a = genshin.artifacts(name);
+    if (a && a.name) {
+      const rList = a.rarityList || a.rarity || [4];
+      const maxR = Array.isArray(rList) ? Math.max(...rList.map(Number)) : Number(rList);
       worldAndGear.push({
-        name: cleanName,
+        name: a.name,
         aliases: [],
-        category: 'Domain',
-        region: d.regionName || 'Unknown',
-        popularity: 35
+        category: 'Artifact Set',
+        rarity: maxR || 4,
+        popularity: maxR === 5 ? 65 : 8
       });
     }
-  }
+  } catch (e) {}
 });
 
-// 3.5 Local Specialties (ของประจำภูมิภาค)
-genshin.materials('names', { matchCategories: true }).forEach(name => {
-  const m = genshin.materials(name);
-  if (m && m.typeText && m.typeText.includes('Local Specialty')) {
-    const regMatch = m.typeText.match(/\((.+)\)/);
-    worldAndGear.push({
-      name: m.name,
-      aliases: [],
-      category: 'Local Specialty',
-      region: regMatch ? regMatch[1] : 'Teyvat',
-      popularity: 30
-    });
-  }
+safeGetNames('enemies').forEach(name => {
+  try {
+    const e = genshin.enemies(name);
+    if (e && e.name) {
+      const isBoss = e.enemyType === 'BOSS' || e.categoryText === 'Mystical Beasts' || e.categoryText === 'Abyss';
+      const validAliases = Array.isArray(e.specialNames)
+        ? e.specialNames.filter(Boolean).slice(0, 2).map(s => String(s).toLowerCase())
+        : [];
+      worldAndGear.push({
+        name: e.name,
+        aliases: validAliases,
+        category: e.enemyType === 'BOSS' ? 'World Boss' : 'Enemy',
+        enemyGroup: e.categoryText || 'Other',
+        popularity: isBoss ? 55 : 18
+      });
+    }
+  } catch (e) {}
+});
+
+safeGetNames('foods').forEach(name => {
+  try {
+    const f = genshin.foods(name);
+    if (f && f.name) {
+      worldAndGear.push({
+        name: f.name,
+        aliases: [],
+        category: f.characterName ? 'Character Specialty Dish' : 'Teyvat Food',
+        foodType: f.filterText || 'Dish',
+        rarity: Number(f.rarity) || 3,
+        popularity: calcPopularity(f, 'food')
+      });
+    }
+  } catch (e) {}
+});
+
+safeGetNames('domains').forEach(name => {
+  try {
+    const d = genshin.domains(name);
+    if (d && d.name) {
+      const cleanName = d.name.replace(/\s+(I|II|III|IV)$/i, '').trim();
+      if (!worldAndGear.some(item => item.name === cleanName && item.category === 'Domain')) {
+        worldAndGear.push({
+          name: cleanName,
+          aliases: [],
+          category: 'Domain',
+          region: d.regionName || 'Unknown',
+          popularity: 35
+        });
+      }
+    }
+  } catch (e) {}
+});
+
+safeGetNames('materials').forEach(name => {
+  try {
+    const m = genshin.materials(name);
+    if (m && m.name && m.typeText && m.typeText.includes('Local Specialty')) {
+      const regMatch = m.typeText.match(/\((.+)\)/);
+      worldAndGear.push({
+        name: m.name,
+        aliases: [],
+        category: 'Local Specialty',
+        region: regMatch ? regMatch[1] : 'Teyvat',
+        popularity: 30
+      });
+    }
+  } catch (e) {}
 });
 
 const fullDB = { characters, weapons, worldAndGear };
-const jsContent = `// ไฟล์นี้สร้างอัตโนมัติจาก GitHub Actions\nwindow.GENSHIN_WIKI_DB = ${JSON.stringify(fullDB, null, 2)};\n`;
+const jsContent = `window.GENSHIN_WIKI_DB = ${JSON.stringify(fullDB, null, 2)};\n`;
 
 fs.writeFileSync('genshin_data.js', jsContent, 'utf8');
-console.log('Successfully generated genshin_data.js!');
+console.log(`Generated: ${characters.length} chars, ${weapons.length} weapons, ${worldAndGear.length} world items.`);
