@@ -1,10 +1,14 @@
 name: Build Genshin Wiki Database
 
 on:
-  workflow_dispatch: # กดรันเองได้จากหน้าเว็บ
+  workflow_dispatch:
   push:
     paths:
       - 'build-db.js'
+      - '.github/workflows/generate-db.yml'
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -16,10 +20,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
 
       - name: Install genshin-db & Generate Data
         run: |
+          npm init -y
           npm install genshin-db@latest
           node build-db.js
 
