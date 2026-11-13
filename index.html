@@ -726,19 +726,38 @@
     };
     // --- เริ่มส่วนที่เพิ่มใหม่: รวมข้อมูลจาก GENSHIN_WIKI_DB เข้ากับ GENSHIN_DB ---
     if (window.GENSHIN_WIKI_DB) {
+      // Merge wiki data INTO the hand-written DB: add new items, and for items that already
+      // exist, copy over any field the hand-written entry is missing (substat, affiliation, ...).
+      // Without this, 96 hand-written characters had no substat/affiliation and could never
+      // appear in those prompt pools, so correct answers scored 0.
+      const SKIP_NAMES = /^(manekin|manekina)$/i;
       const mergeUnique = (target, source) => {
         if (!Array.isArray(source)) return;
-        const seen = new Set(target.map(i => i.name.toLowerCase()));
+        const byName = new Map(target.map(i => [i.name.toLowerCase(), i]));
         source.forEach(item => {
-          if (item && item.name && !seen.has(item.name.toLowerCase())) {
+          if (!item || !item.name || SKIP_NAMES.test(item.name)) return;
+          const existing = byName.get(item.name.toLowerCase());
+          if (!existing) {
             target.push(item);
-            seen.add(item.name.toLowerCase());
+            byName.set(item.name.toLowerCase(), item);
+            return;
           }
+          Object.keys(item).forEach(k => {
+            const v = existing[k], w = item[k];
+            const empty = v === undefined || v === null || v === "" || v === "None" || v === "Unknown" ||
+              (Array.isArray(v) && v.length === 0);
+            if (empty && w !== undefined && w !== "None" && w !== "Unknown") existing[k] = w;
+          });
         });
       };
       mergeUnique(GENSHIN_DB.characters, window.GENSHIN_WIKI_DB.characters);
       mergeUnique(GENSHIN_DB.weapons, window.GENSHIN_WIKI_DB.weapons);
       mergeUnique(GENSHIN_DB.worldAndGear, window.GENSHIN_WIKI_DB.worldAndGear);
+      // Regions the wiki package doesn't know yet (add more as new characters release)
+      const REGION_FIX = { Nicole: "Nod-Krai" };
+      GENSHIN_DB.characters.forEach(c => {
+        if ((c.region === "Unknown" || !c.region) && REGION_FIX[c.name]) c.region = REGION_FIX[c.name];
+      });
     }
     // --- จบส่วนที่เพิ่มใหม่ ---
 
@@ -992,8 +1011,11 @@
       if (!clean || clean.length < 2) return null;
 
       // 1. Exact Match on Canonical Name or Alias
+      // Canonical names win over aliases (some enemies list each other as aliases)
       for (const item of pool) {
         if (normalizeStr(item.name) === clean) return item;
+      }
+      for (const item of pool) {
         if (item.aliases && item.aliases.some(al => normalizeStr(al) === clean)) return item;
       }
 

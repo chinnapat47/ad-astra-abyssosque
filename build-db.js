@@ -151,8 +151,15 @@ safeGetNames('materials').forEach(name => {
   } catch (e) {}
 });
 
-const fullDB = { characters, weapons, worldAndGear };
+// Clean-up: skip non-playable dummies and drop aliases that are really another item's name
+const nameSet = new Set(worldAndGear.map(i => i.name.toLowerCase()));
+worldAndGear.forEach(i => {
+  i.aliases = (i.aliases || []).filter(a => !nameSet.has(a) || a === i.name.toLowerCase());
+});
+const playable = characters.filter(c => !/^manekin/i.test(c.name));
+
+const fullDB = { characters: playable, weapons, worldAndGear };
 const jsContent = `window.GENSHIN_WIKI_DB = ${JSON.stringify(fullDB, null, 2)};\n`;
 
 fs.writeFileSync('genshin_data.js', jsContent, 'utf8');
-console.log(`Generated: ${characters.length} chars, ${weapons.length} weapons, ${worldAndGear.length} world items.`);
+console.log(`Generated: ${playable.length} chars, ${weapons.length} weapons, ${worldAndGear.length} world items.`);
