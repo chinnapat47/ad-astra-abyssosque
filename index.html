@@ -453,6 +453,7 @@
   <!-- =========================================================================
        JAVASCRIPT ENGINE: GENSHIN_DB, PROCEDURAL GENERATOR, WISH FX & AUDIO
        ========================================================================= -->
+  <script src="./genshin_data.js"></script>
   <script>
     /***************************************************************************
      * 1. MASTER ENTITY DATABASE (GENSHIN_DB)
@@ -723,6 +724,23 @@
         { name: "Saurian Claw Succulent", aliases: ["succulent"], category: "Local Specialty", region: "Natlan", popularity: 5 }
       ]
     };
+    // --- เริ่มส่วนที่เพิ่มใหม่: รวมข้อมูลจาก GENSHIN_WIKI_DB เข้ากับ GENSHIN_DB ---
+    if (window.GENSHIN_WIKI_DB) {
+      const mergeUnique = (target, source) => {
+        if (!Array.isArray(source)) return;
+        const seen = new Set(target.map(i => i.name.toLowerCase()));
+        source.forEach(item => {
+          if (item && item.name && !seen.has(item.name.toLowerCase())) {
+            target.push(item);
+            seen.add(item.name.toLowerCase());
+          }
+        });
+      };
+      mergeUnique(GENSHIN_DB.characters, window.GENSHIN_WIKI_DB.characters);
+      mergeUnique(GENSHIN_DB.weapons, window.GENSHIN_WIKI_DB.weapons);
+      mergeUnique(GENSHIN_DB.worldAndGear, window.GENSHIN_WIKI_DB.worldAndGear);
+    }
+    // --- จบส่วนที่เพิ่มใหม่ ---
 
     /***************************************************************************
      * 2. SEEDED PRNG (MULBERRY32) & PROCEDURAL GENERATOR
@@ -831,7 +849,67 @@
           candidates.push({ id: `cat_${cat}`, text: `Name ${article} ${cat}`, pool });
         }
       });
+// --- เริ่มส่วนที่เพิ่มใหม่: คำถามจากข้อมูล Wiki ทั้งหมด ---
+      // Template 9: ตัวละครตามค่าสเตตัสเติบโต (Ascension Substat)
+      const substats = [...new Set(GENSHIN_DB.characters.map(c => c.substat).filter(Boolean))];
+      substats.forEach(sub => {
+        if (sub === "None") return;
+        const pool = GENSHIN_DB.characters.filter(c => c.substat === sub);
+        if (pool.length >= 4) {
+          candidates.push({ id: `char_sub_${sub}`, text: `Name a character who ascends with ${sub}`, pool });
+        }
+      });
 
+      // Template 10: ตัวละครตามสังกัด (Affiliation)
+      const affiliations = [...new Set(GENSHIN_DB.characters.map(c => c.affiliation).filter(Boolean))];
+      affiliations.forEach(aff => {
+        if (aff === "None") return;
+        const pool = GENSHIN_DB.characters.filter(c => c.affiliation === aff);
+        if (pool.length >= 4) {
+          candidates.push({ id: `char_aff_${aff}`, text: `Name a character affiliated with ${aff}`, pool });
+        }
+      });
+
+      // Template 11: อาวุธแยกตามระดับดาว (รวม 3 ดาว) และค่า Substat
+      const wpSubstats = [...new Set(GENSHIN_DB.weapons.map(w => w.substat).filter(Boolean))];
+      weapons.forEach(wp => {
+        const pool3 = GENSHIN_DB.weapons.filter(w => w.rarity === 3 && w.type === wp);
+        if (pool3.length >= 4) {
+          candidates.push({ id: `wp_r_3_${wp}`, text: `Name a 3-star ${wp} (Weapon)`, pool: pool3 });
+        }
+        wpSubstats.forEach(sub => {
+          if (sub === "None") return;
+          const pool = GENSHIN_DB.weapons.filter(w => w.type === wp && w.substat === sub);
+          if (pool.length >= 4) {
+            candidates.push({ id: `wp_sub_${wp}_${sub}`, text: `Name a ${wp} with a ${sub} substat`, pool });
+          }
+        });
+      });
+
+      // Template 12: หมวดหมู่ใหม่ใน World & Gear (Bosses, Enemies, Foods, Specialty Dishes, Domains)
+      ["World Boss", "Enemy", "Character Specialty Dish", "Teyvat Food", "Domain"].forEach(cat => {
+        const pool = GENSHIN_DB.worldAndGear.filter(i => i.category === cat);
+        if (pool.length >= 4) {
+          candidates.push({ id: `wag_cat_${cat}`, text: `Name a ${cat}`, pool });
+        }
+      });
+
+      // Template 13: ศัตรูแยกตามเผ่าพันธุ์ และดันเจี้ยนแยกตามเมือง
+      const enemyGroups = [...new Set(GENSHIN_DB.worldAndGear.filter(i => i.category === "Enemy").map(i => i.enemyGroup).filter(Boolean))];
+      enemyGroups.forEach(grp => {
+        const pool = GENSHIN_DB.worldAndGear.filter(i => i.category === "Enemy" && i.enemyGroup === grp);
+        if (pool.length >= 4) {
+          candidates.push({ id: `enemy_grp_${grp}`, text: `Name an enemy from the "${grp}" category`, pool });
+        }
+      });
+
+      regions.forEach(reg => {
+        const pool = GENSHIN_DB.worldAndGear.filter(i => i.category === "Domain" && i.region === reg);
+        if (pool.length >= 4) {
+          candidates.push({ id: `dom_reg_${reg}`, text: `Name a Domain in ${reg}`, pool });
+        }
+      });
+      // --- จบส่วนที่เพิ่มใหม่ ---
       return candidates;
     }
 
