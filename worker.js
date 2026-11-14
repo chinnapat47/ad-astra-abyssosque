@@ -1,51 +1,30 @@
-// Cloudflare Worker + D1: counts how many players picked each answer, per prompt, per day.
-// Stores only: date, prompt id, answer name, count. No IPs, no accounts.
-const ORIGINS = ["https://chinnapat47.github.io"]; // <- add your own domain(s) here
-
+// Cloudflare Worker for Ad Astra Abyssosque: pick-rate stats + all-player run records.
+// Bind a KV namespace named DB (Workers > Settings > Bindings). Routes:
+//   GET /stats?date=YYYY-MM-DD   POST /answer {date,promptId,item}
+//   POST /run {score,mode,picks} GET /dist -> {bins:[36 x 200-point buckets], total}
+const CORS = { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Methods": "GET,POST,OPTIONS", "Access-Control-Allow-Headers": "Content-Type" };
+const J = (o, s = 200) => new Response(JSON.stringify(o), { status: s, headers: { "Content-Type": "application/json", ...CORS } });
 export default {
   async fetch(req, env) {
-    const url = new URL(req.url);
-    const origin = req.headers.get("Origin") || "";
-    const cors = {
-      "Access-Control-Allow-Origin": ORIGINS.includes(origin) ? origin : ORIGINS[0],
-      "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type",
-      "Vary": "Origin",
-    };
-    const json = (o, status = 200, extra = {}) =>
-      new Response(JSON.stringify(o), { status, headers: { ...cors, "Content-Type": "application/json", ...extra } });
-    const okDate = (d) => /^\d{4}-\d{2}-\d{2}$/.test(d || "") && Math.abs(Date.parse(d + "T00:00:00Z") - Date.now()) < 3 * 86400e3;
-
-    if (req.method === "OPTIONS") return new Response(null, { headers: cors });
-
-    if (url.pathname === "/stats" && req.method === "GET") {
-      const date = url.searchParams.get("date");
-      if (!okDate(date)) return json({ error: "bad date" }, 400);
-      const { results } = await env.DB.prepare("SELECT prompt_id, item, count FROM answers WHERE date = ?").bind(date).all();
-      const out = {};
-      for (const r of results) {
-        const p = (out[r.prompt_id] ||= { total: 0, items: {} });
-        p.items[r.item] = r.count;
-        p.total += r.count;
-      }
-      return json(out, 200, { "Cache-Control": "public, max-age=30" });
+    const u = new URL(req.url);
+    if (req.method === "OPTIONS") return new Response(null, { headers: CORS });
+    if (u.pathname === "/stats") return J(JSON.parse((await env.DB.get("s:" + u.searchParams.get("date"))) || "{}"));
+    if (req.method !== "POST") {
+      if (u.pathname === "/dist") { const d = JSON.parse((await env.DB.get("dist")) || "null") || { bins: Array(36).fill(0), total: 0 }; return J(d); }
+      return J({ ok: true });
     }
-
-    if (url.pathname === "/answer" && req.method === "POST") {
-      let b;
-      try { b = await req.json(); } catch { return json({ error: "bad json" }, 400); }
-      const { date, promptId, item } = b || {};
-      if (!okDate(date) || !/^[A-Za-z0-9_\-]{1,60}$/.test(promptId || "") || typeof item !== "string" || !item || item.length > 80)
-        return json({ error: "bad input" }, 400);
-      // spam guard: cap distinct answers per prompt per day
-      const row = await env.DB.prepare("SELECT COUNT(*) AS n FROM answers WHERE date = ? AND prompt_id = ?").bind(date, promptId).first();
-      const exists = await env.DB.prepare("SELECT 1 AS x FROM answers WHERE date = ? AND prompt_id = ? AND item = ?").bind(date, promptId, item).first();
-      if (!exists && row.n >= 400) return json({ error: "full" }, 429);
-      await env.DB.prepare(
-        "INSERT INTO answers (date, prompt_id, item, count) VALUES (?, ?, ?, 1) ON CONFLICT(date, prompt_id, item) DO UPDATE SET count = count + 1"
-      ).bind(date, promptId, item).run();
-      return json({ ok: true });
+    let b; try { b = await req.json(); } catch { return J({ error: "bad json" }, 400); }
+    if (u.pathname === "/answer") {
+      const { date, promptId, item } = b; if (!date || !promptId || !item) return J({ error: "bad" }, 400);
+      const k = "s:" + date, s = JSON.parse((await env.DB.get(k)) || "{}"), p = (s[promptId] ||= { total: 0, items: {} });
+      p.total++; p.items[item] = (p.items[item] || 0) + 1;
+      await env.DB.put(k, JSON.stringify(s), { expirationTtl: 60 * 60 * 24 * 14 }); return J({ ok: true });
     }
-    return json({ error: "not found" }, 404);
-  },
+    if (u.pathname === "/run") {
+      const sc = Math.max(0, Math.min(7000, Math.round(Number(b.score)))); if (!Number.isFinite(sc)) return J({ error: "bad" }, 400);
+      const d = JSON.parse((await env.DB.get("dist")) || "null") || { bins: Array(36).fill(0), total: 0 };
+      d.bins[Math.min(35, Math.floor(sc / 200))]++; d.total++; await env.DB.put("dist", JSON.stringify(d)); return J({ ok: true });
+    }
+    return J({ error: "not found" }, 404);
+  }
 };
