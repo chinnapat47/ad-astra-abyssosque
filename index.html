@@ -192,6 +192,11 @@
     header.fixed { margin-top: env(safe-area-inset-top, 0px); }
     footer.fixed { margin-bottom: env(safe-area-inset-bottom, 0px); }
     @media (prefers-reduced-motion: reduce) { .wish-star, .head-slam, .head-miracle, .primo-float { animation: none; opacity: 1; } }
+    @keyframes crunchPulse { 0%,100% { opacity: .3; } 50% { opacity: 1; } }
+    #crunch-vignette { display: none; box-shadow: inset 0 0 130px 30px rgba(239,68,68,.6); }
+    body.crunch #crunch-vignette { display: block; animation: crunchPulse var(--beat, .9s) ease-in-out infinite; }
+    body.crunch #timer-bar { background: linear-gradient(90deg,#ef4444,#f97316) !important; box-shadow: 0 0 20px #ef4444 !important; }
+    @media (prefers-reduced-motion: reduce) { body.crunch #crunch-vignette { animation: none; opacity: .7; } }
   </style>
 </head>
 <body class="relative w-full h-full select-none overflow-hidden">
@@ -202,7 +207,16 @@
   </div>
 
   <!-- BACKGROUND & WISH FX CANVAS -->
+  <canvas id="pixel-world" style="position:fixed;inset:0;width:100%;height:100%;image-rendering:pixelated;z-index:1;pointer-events:none"></canvas>
+  <canvas id="ruler-canvas" style="position:fixed;right:0;top:0;width:90px;height:100%;z-index:6;pointer-events:none"></canvas>
+  <canvas id="tier-canvas" style="position:fixed;inset:0;width:100%;height:100%;z-index:7;pointer-events:none"></canvas>
+  <canvas id="scene-canvas" class="fixed inset-0 pointer-events-none" style="z-index:5"></canvas>
   <canvas id="fx-canvas" class="fixed inset-0 pointer-events-none z-10"></canvas>
+  <div id="crunch-vignette" class="fixed inset-0 pointer-events-none" style="z-index:30"></div>
+  <div id="suspense" class="fixed inset-0 pointer-events-none" style="z-index:40;opacity:0;transition:opacity .25s;background:radial-gradient(ellipse at 50% 60%, rgba(5,8,25,.5), rgba(5,8,25,.88))">
+    <div id="suspense-beam" style="position:absolute;left:50%;bottom:0;width:3px;height:0;transform:translateX(-50%);background:linear-gradient(to top,transparent,#fff)"></div>
+    <div id="suspense-orb" style="position:absolute;left:50%;bottom:6%;width:34px;height:34px;border-radius:50%;transform:translateX(-50%)"></div>
+  </div>
 
   <!-- SCREEN FLASH OVERLAY FOR WISH ANIMATIONS -->
   <div id="wish-flash" class="fixed inset-0 pointer-events-none z-20 opacity-0 transition-opacity duration-500"></div>
@@ -293,7 +307,7 @@
       </h1>
 
       <p class="text-slate-300/85 text-sm sm:text-base max-w-lg leading-relaxed mb-8 font-normal">
-        Face <span class="text-celestia font-semibold">7 Teyvat prompts</span>. Type a factually valid answer that is as <span class="text-wishGold font-semibold">obscure and forgotten</span> as possible. The rarer your pick, the higher you climb: Teyvat skies, the False Sky, the Moon, the Abyss, then Celestia.
+        Face <span class="text-celestia font-semibold">7 Teyvat prompts</span>. Type a factually valid answer that is as <span class="text-wishGold font-semibold">obscure and forgotten</span> as possible. The rarer your pick, the higher you climb: Mondstadt, Dragonspine, the Teyvat sky, Celestia, the Moon, then the Abyss.
       </p>
 
       <!-- Rarity Legend Pills -->
@@ -1441,12 +1455,13 @@
       }
     }
 
+    var PIXEL_WORLD = true;
     function renderCanvasLoop() {
       ctx.clearRect(0, 0, cw, ch);
       waveTime += 0.018;
 
       // 1. Ambient Background Stars
-      for (const s of bgStars) {
+      for (const s of (PIXEL_WORLD ? [] : bgStars)) {
         s.y -= s.speed;
         if (s.y < 0) {
           s.y = ch;
@@ -1464,7 +1479,7 @@
       const baseWaveY = ch * horizonCurrentYRatio;
 
       ctx.save();
-      const dotCount = Math.floor(cw / 18);
+      const dotCount = PIXEL_WORLD ? -1 : Math.floor(cw / 18);
       let prevX = null;
       let prevY = null;
 
@@ -1694,14 +1709,14 @@
     }
   }
 
-  const ZONES = [{ from: 0, name: "TEYVAT SKIES" }, { from: 1200, name: "THE FALSE SKY" }, { from: 2800, name: "THE MOON" }, { from: 4400, name: "THE ABYSS" }, { from: 5800, name: "CELESTIA" }];
+  const ZONES = [{ from: 0, name: "MONDSTADT" }, { from: 1000, name: "DRAGONSPINE" }, { from: 2200, name: "TEYVAT SKY" }, { from: 3600, name: "CELESTIA" }, { from: 4800, name: "THE MOON" }, { from: 6000, name: "THE ABYSS" }];
   function getZone(score) { let z = ZONES[0]; for (const k of ZONES) if (score >= k.from) z = k; return z; }
   function getAbyssFloorStatus(totalScore) {
     const z = getZone(totalScore);
     return { floorNum: ZONES.indexOf(z) + 1, meters: totalScore, hudLabel: `${z.name} • ${totalScore}m`, summaryTitle: z.name };
   }
   const CREATURES = { MISS: ["🌀", "Abyss Herald"], COMMON_3: ["🫧", "Anemo Slime"], UNCOMMON_4: ["🦋", "Seelie"], RARE_5: ["🐉", "Stormterror"], MIRACLE: ["🌠", "Celestia's Gaze"] };
-  const SKY = [[0, [24, 60, 110], [8, 16, 40]], [1200, [76, 48, 128], [20, 14, 54]], [2800, [110, 125, 175], [14, 18, 44]], [4400, [60, 12, 40], [6, 2, 10]], [5800, [180, 150, 80], [40, 30, 66]], [7000, [255, 238, 176], [120, 96, 156]]];
+  const SKY = [[0, [120, 190, 235], [60, 120, 190]], [1000, [190, 220, 240], [110, 150, 200]], [2200, [40, 90, 170], [20, 40, 100]], [3600, [245, 215, 140], [150, 110, 80]], [4800, [40, 40, 100], [14, 14, 44]], [6000, [50, 8, 30], [8, 2, 10]], [7000, [20, 2, 12], [4, 0, 6]]];
   function skyAt(sc) {
     sc = Math.min(7000, sc); let i = 0;
     while (i < SKY.length - 2 && sc >= SKY[i + 1][0]) i++;
@@ -1741,7 +1756,9 @@
   }
 
   // ---- Live pick rates (optional backend: see worker/README). Empty string = simulated rates only.
-   const API_BASE = "https://ad-astra-abyssosque.kaowchinnapat.workers.dev";
+  let lastBeatSec = -1;
+  let lastReveal = null;
+  const API_BASE = "https://ad-astra-abyssosque.kaowchinnapat.workers.dev";
   const POSTED_KEY = "ABYSSOSQUE_POSTED_V1";
   async function fetchLiveStats(date) {
     if (!API_BASE) return null;
@@ -1823,12 +1840,22 @@
     showPhaseScreen("PLAY");
     updateHudAndDepthVisuals();
     clearInterval(gameState.timerInterval);
+    lastBeatSec = -1;
+    document.body.classList.remove("crunch");
     const end = performance.now() + 25000;
     gameState.timerInterval = setInterval(() => {
       const left = Math.max(0, (end - performance.now()) / 1000);
       gameState.timeRemaining = left;
       elTimerBar.style.width = (left / 25 * 100) + "%";
       elPlayTimerText.textContent = left.toFixed(1) + "s";
+      const crunch = left > 0 && left <= 5;
+      if (crunch !== document.body.classList.contains("crunch")) document.body.classList.toggle("crunch", crunch);
+      elPlayTimerText.style.color = crunch ? "#f87171" : "";
+      if (crunch) {
+        document.documentElement.style.setProperty("--beat", (0.3 + left * 0.12).toFixed(2) + "s");
+        const sec = Math.ceil(left);
+        if (sec !== lastBeatSec) { lastBeatSec = sec; audio.playTone(70, "sine", 0.16, 0.2); audio.playTone(60, "sine", 0.14, 0.14, 0.18); }
+      }
       if (left <= 0) submitAnswer(true);
     }, 50);
     setTimeout(() => elAnswerInput.focus(), 60);
@@ -1857,12 +1884,14 @@
       starsEl.appendChild(s);
     }
     const cr = CREATURES[ev.tierKey], ce = $("reveal-creature");
-    ce.className = "primo-float text-5xl sm:text-6xl mb-1";
-    ce.textContent = cr[0];
+    ce.className = "primo-float mb-1 flex justify-center";
+    ce.innerHTML = "";
+    ce.appendChild(spriteCanvas(ev.tierKey));
     ce.title = cr[1];
     ce.style.filter = `drop-shadow(0 0 18px ${ev.colorHex})`;
     const prevZone = getZone(gameState.totalScore - ev.points).name, nowZone = getZone(gameState.totalScore).name;
     const zoneNote = prevZone !== nowZone ? ` • ENTERED ${nowZone}` : "";
+    const rk = rankOf(ev.points), rankNote = rk ? ` • RANK: ${rk.name}` : "";
     const badge = $("reveal-tier-badge");
     badge.textContent = ev.badgeText;
     badge.style.color = ev.colorHex;
@@ -1879,7 +1908,7 @@
       : "NOT A VALID RECORD FOR THIS PROMPT";
     $("reveal-points").style.color = ev.colorHex;
     countUp($("reveal-points"), ev.points, "+", " PTS");
-    $("reveal-depth-delta").textContent = ev.points ? `ASCENDED +${ev.points}m HIGHER${zoneNote}` : "THE CLIMB STALLS";
+    $("reveal-depth-delta").textContent = ev.points ? `ASCENDED +${ev.points}m HIGHER${rankNote}${zoneNote}` : "THE CLIMB STALLS";
     $("reveal-flavor").textContent = `"${ev.flavor}"`;
     $("reveal-most-common").textContent = `${p.mostCommon.name} (${p.mostCommon.pickRate}%)`.toUpperCase();
     $("reveal-rarest-pick").textContent = `${p.rarestPossible.name} (${p.rarestPossible.pickRate}%)`.toUpperCase();
@@ -1890,17 +1919,22 @@
     const raw = elAnswerInput.value.trim();
     if (!raw && force !== true) return;
     clearInterval(gameState.timerInterval);
+    document.body.classList.remove("crunch");
+    elPlayTimerText.style.color = "";
     const p = gameState.prompts[gameState.currentIndex];
     const m = validatePlayerGuess(raw, p.pool);
     const ev = evaluateRarityAndScore(m);
     gameState.totalScore += ev.points;
     gameState.history.push({ promptText: p.text, rawGuess: raw, matchedItem: m, evalResult: ev, mostCommon: p.mostCommon, rarestPossible: p.rarestPossible });
     postAnswer(p.id, m ? m.name : null);
-    renderReveal(p, raw, m, ev);
-    showPhaseScreen("REVEAL");
-    updateHudAndDepthVisuals();
-    spawnWishAnimation(ev.tierKey);
-    audio.playRevealSFX(ev.tierKey);
+    lastReveal = { prev: gameState.totalScore - ev.points, raw, name: m ? m.name : null, ev, rank: rankOf(ev.points) };
+    playSuspense(ev, () => {
+      renderReveal(p, raw, m, ev);
+      showPhaseScreen("REVEAL");
+      updateHudAndDepthVisuals();
+      spawnWishAnimation(ev.tierKey);
+      audio.playRevealSFX(ev.tierKey);
+    });
   }
 
   function finishGame(restored) {
@@ -1979,6 +2013,7 @@
       if (gameState.phase !== "PLAY") return;
       elAnswerInput.value = m.name;
       elAnswerInput.style.color = "#4deeea";
+      shineInput();
       fixChip.textContent = "✓ corrected";
       setTimeout(() => { elAnswerInput.style.color = ""; }, 600);
     }, 700);
@@ -1994,6 +2029,246 @@
   }
   updateDailyNote();
   setInterval(updateDailyNote, 1000);
+  // ================= Animated scene while answering =================
+  const reduceMotion = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const sceneCv = $("scene-canvas"), sc = sceneCv.getContext("2d");
+  let sceneW = 0, sceneH = 0;
+  const fitScene = () => { sceneW = sceneCv.width = innerWidth; sceneH = sceneCv.height = innerHeight; };
+  addEventListener("resize", fitScene); fitScene();
+  const ZONE_RGB = { "MONDSTADT": [140, 230, 160], "DRAGONSPINE": [200, 235, 255], "TEYVAT SKY": [150, 200, 255], "CELESTIA": [255, 215, 120], "THE MOON": [210, 220, 255], "THE ABYSS": [255, 90, 110] };
+  const clouds = Array.from({ length: 8 }, () => ({ x: Math.random(), y: Math.random(), r: 90 + Math.random() * 140, v: 0.15 + Math.random() * 0.35, a: 0.05 + Math.random() * 0.07 }));
+  const wisps = Array.from({ length: 16 }, () => ({ x: Math.random(), y: Math.random(), v: 0.4 + Math.random() * 0.9, ph: Math.random() * 6.28, r: 1.5 + Math.random() * 2.2 }));
+  const sparkList = [];
+  let sceneAlpha = 0, boost = 0, scenePrev = performance.now();
+  const zoneRGB = () => ZONE_RGB[getZone(gameState.totalScore).name] || ZONE_RGB["TEYVAT SKIES"];
+
+  function addSparks(x, y, n, rgb, power) {
+    for (let i = 0; i < n; i++) {
+      sparkList.push({ x, y, vx: (Math.random() - 0.5) * 90 * power, vy: -(50 + Math.random() * 110) * power, life: 1, size: 2 + Math.random() * 2.5, rgb });
+    }
+  }
+  function shineInput() {
+    const r = elAnswerInput.getBoundingClientRect();
+    for (let i = 0; i < 24; i++) addSparks(r.left + Math.random() * r.width, r.top + r.height * 0.5, 1, [255, 215, 120], 1.3);
+  }
+  elAnswerInput.addEventListener("input", (e) => {
+    if (reduceMotion) return;
+    const del = e.inputType && e.inputType.startsWith("delete");
+    boost = Math.min(3, boost + (del ? 0.2 : 0.8));
+    const r = elAnswerInput.getBoundingClientRect();
+    const x = Math.min(r.right - 14, r.left + 18 + Math.min(elAnswerInput.value.length, 40) * 10.5);
+    addSparks(x, r.top + r.height * 0.35, del ? 1 : 4, zoneRGB(), 1);
+  });
+
+  function sceneFrame(now) {
+    const dt = Math.min(0.05, (now - scenePrev) / 1000); scenePrev = now;
+    sc.clearRect(0, 0, sceneW, sceneH);
+    const want = 0; // soft ambient clouds replaced by the pixel world
+    sceneAlpha += (want - sceneAlpha) * Math.min(1, dt * 4);
+    boost *= Math.pow(0.15, dt);
+    const rgb = zoneRGB(), speed = 1 + boost;
+    const rgba = (c, a) => `rgba(${c[0]},${c[1]},${c[2]},${a})`;
+    if (sceneAlpha > 0.01) {
+      // clouds and wisps drift DOWN past you, so it feels like you are climbing (faster while you type)
+      for (const c of clouds) {
+        c.y += c.v * 0.05 * speed * dt;
+        if (c.y > 1.25) { c.y = -0.25; c.x = Math.random(); }
+        const cx = c.x * sceneW, cy = c.y * sceneH;
+        const g = sc.createRadialGradient(cx, cy, 0, cx, cy, c.r);
+        g.addColorStop(0, rgba(rgb, c.a * sceneAlpha)); g.addColorStop(1, rgba(rgb, 0));
+        sc.fillStyle = g; sc.beginPath(); sc.arc(cx, cy, c.r, 0, 6.2832); sc.fill();
+      }
+      for (const w of wisps) {
+        w.y += w.v * 0.09 * speed * dt;
+        if (w.y > 1.05) { w.y = -0.05; w.x = Math.random(); }
+        const wx = (w.x + Math.sin(now / 900 + w.ph) * 0.025) * sceneW, wy = w.y * sceneH;
+        const g = sc.createRadialGradient(wx, wy, 0, wx, wy, w.r * 6);
+        g.addColorStop(0, rgba(rgb, 0.85 * sceneAlpha)); g.addColorStop(1, rgba(rgb, 0));
+        sc.fillStyle = g; sc.beginPath(); sc.arc(wx, wy, w.r * 6, 0, 6.2832); sc.fill();
+      }
+    }
+    for (let i = sparkList.length - 1; i >= 0; i--) {
+      const p = sparkList[i];
+      p.x += p.vx * dt; p.y += p.vy * dt; p.vy += 40 * dt; p.life -= dt * 1.6;
+      if (p.life <= 0) { sparkList.splice(i, 1); continue; }
+      sc.fillStyle = rgba(p.rgb, p.life);
+      sc.beginPath();
+      sc.moveTo(p.x, p.y - p.size * 1.6); sc.lineTo(p.x + p.size * 0.5, p.y); sc.lineTo(p.x, p.y + p.size * 1.6); sc.lineTo(p.x - p.size * 0.5, p.y);
+      sc.closePath(); sc.fill();
+    }
+    requestAnimationFrame(sceneFrame);
+  }
+  requestAnimationFrame(sceneFrame);
+
+  // Wish-style suspense: a star streaks upward and settles on the tier colour before the result shows
+  function playSuspense(ev, done) {
+    if (reduceMotion) { done(); return; }
+    const t = ev.tierKey, box = $("suspense"), orb = $("suspense-orb"), beam = $("suspense-beam");
+    const dur = t === "MIRACLE" ? 1700 : t === "RARE_5" ? 1400 : t === "UNCOMMON_4" ? 1100 : t === "COMMON_3" ? 900 : 650;
+    gameState.phase = "SUSPENSE";
+    clearTimeout(fixTimer);
+    box.style.opacity = "1";
+    const finalC = t === "MISS" ? "#ef4444" : ev.colorHex, midC = t === "MISS" ? "#7f1d1d" : "#a78bfa";
+    orb.animate([
+      { bottom: "6%", transform: "translateX(-50%) scale(.5)", background: "#60a5fa", boxShadow: "0 0 30px 10px #60a5fa" },
+      { bottom: "34%", transform: "translateX(-50%) scale(.9)", background: midC, boxShadow: `0 0 50px 18px ${midC}`, offset: 0.6 },
+      { bottom: "50%", transform: "translateX(-50%) scale(1.6)", background: finalC, boxShadow: `0 0 90px 36px ${finalC}` }
+    ], { duration: dur, easing: "cubic-bezier(.3,.1,.2,1)", fill: "forwards" });
+    beam.animate([{ height: "0%", opacity: 0.2 }, { height: "52%", opacity: 0.9 }], { duration: dur, easing: "ease-out", fill: "forwards" });
+    [330, 392, 494, 587, 740].slice(0, t === "MISS" ? 2 : 5).forEach((f, i) => audio.playTone(f, "triangle", 0.28, 0.07, i * dur / 6000));
+    setTimeout(() => { box.style.opacity = "0"; done(); }, dur);
+  }
+
+
+  // ================= Pixel world (altitude ruler, zone scenery, pixel avatar & creatures) =================
+  const SPR = {
+    MISS:       ["........", ".rrrrrr.", "rrwwwwrr", "rwwkkwwr", "rwwkkwwr", "rrwwwwrr", ".rrrrrr.", "........"],
+    COMMON_3:   ["........", "..bbbb..", ".bbbbbb.", "bwbbbbwb", "bbkbbkbb", "bbbbbbbb", ".bbbbbb.", "........"],
+    UNCOMMON_4: ["c......c", "cc.ww.cc", "ccwwwwcc", ".cwwwwc.", "..wwww..", "...ww...", "..c..c..", "........"].map(r => r.slice(0, 8)),
+    RARE_5:     ["p.p..p.p", "ppppppp.", "pyppypp.", "pppppppp", ".pwppwp.", "..pppp..", "...pp...", "........"],
+    MIRACLE:    ["...y....", "...y....", "yyyyyyy.", ".yyyyy..", "..yyy...", ".yy.yy..", "yy...yy.", "........"]
+  };
+  const PAL = { b: "#5ec8ff", w: "#ffffff", k: "#12233a", c: "#4deeea", p: "#a78bfa", y: "#ffd24a", r: "#ff4d6d" };
+  function spriteCanvas(key) {
+    const rows = SPR[key] || SPR.COMMON_3, cv = document.createElement("canvas");
+    cv.width = 8; cv.height = 8; cv.style.cssText = "width:80px;height:80px;image-rendering:pixelated";
+    const x = cv.getContext("2d");
+    rows.forEach((r, j) => [...r].forEach((ch, i) => { if (PAL[ch]) { x.fillStyle = PAL[ch]; x.fillRect(i, j, 1, 1); } }));
+    return cv;
+  }
+
+  const pw = $("pixel-world"), pctx = pw.getContext("2d"), rcv = $("ruler-canvas"), rctx = rcv.getContext("2d");
+  const PH = 180, MPP = 8; // pixel rows on screen, metres per pixel row
+  let PWID = 320, viewAlt = 0, lastPx = 0;
+  function fitPixel() { PWID = Math.max(240, Math.round(PH * innerWidth / innerHeight)); pw.width = PWID; pw.height = PH; rcv.width = 90; rcv.height = innerHeight; pctx.imageSmoothingEnabled = false; }
+  addEventListener("resize", fitPixel); fitPixel();
+  const RND = (i) => { const x = Math.sin(i * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
+  const GEM = ["...c...", "..cwc..", ".cwwwc.", "cwwwwwc", ".cwwwc.", "..cwc..", "...c..."];
+
+  function pixelFrame(now) {
+    requestAnimationFrame(pixelFrame);
+    if (now - lastPx < 66) return; // ~15 fps for the retro feel
+    lastPx = now;
+    const t = now / 1000, W = PWID, f = innerHeight / PH;
+    viewAlt += (gameState.totalScore - viewAlt) * 0.06;
+    const Y = (a) => Math.round(PH * 0.6 - (a - viewAlt) / MPP);
+    const px = (x, y, w, h, c) => { pctx.fillStyle = c; pctx.fillRect(Math.round(x), Math.round(y), w, h); };
+    // sky in 4-pixel bands, coloured by the altitude of each band
+    for (let y = 0; y < PH; y += 4) px(0, y, W, 4, `rgb(${skyAt(viewAlt + (PH * 0.6 - y) * MPP)[0]})`);
+    // stars (high up)
+    for (let i = 0; i < 70; i++) {
+      const y = Y(3000 + RND(i) * 4000);
+      if (y >= 0 && y < PH && (Math.floor(t * 2 + i) % 4)) px(RND(i + 99) * W, y, 1, 1, "#fff");
+    }
+    // Moon
+    { const cx = W * 0.72, cy = Y(5400), r = 30;
+      if (cy > -r && cy < PH + r) {
+        for (let dy = -r; dy <= r; dy++) { const hw = Math.floor(Math.sqrt(r * r - dy * dy)); px(cx - hw, cy + dy, hw * 2, 1, "#dfe8fb"); }
+        px(cx - 14, cy - 10, 8, 6, "#b9c6e6"); px(cx + 6, cy + 4, 10, 7, "#b9c6e6"); px(cx - 4, cy + 14, 5, 4, "#b9c6e6");
+      } }
+    // Celestia: golden platform, columns and light rays
+    { const base = Y(4100), cx = W * 0.5;
+      if (base > -40 && base < PH + 40) {
+        for (let i = 0; i < 9; i++) px(cx - 44 + i * 11, 0, 1, Math.max(0, base - 24), "rgba(255,240,180,.22)");
+        px(cx - 42, base, 84, 3, "#f4d77a"); px(cx - 36, base + 3, 72, 2, "#c9a24a"); px(cx - 30, base + 5, 60, 3, "#8a6a2f");
+        for (let i = 0; i < 5; i++) px(cx - 32 + i * 16, base - 20, 4, 20, "#fff3c4");
+        px(cx - 36, base - 23, 72, 3, "#f4d77a");
+      } }
+    // Teyvat sky: floating islands + clouds
+    for (let i = 0; i < 3; i++) {
+      const y = Y(2500 + i * 420), x = ((W * (0.2 + i * 0.3)) + t * 1.5) % (W + 40) - 20;
+      if (y > -12 && y < PH + 12) { px(x, y, 22, 3, "#6fbf5a"); px(x + 2, y + 3, 18, 2, "#8a6a47"); px(x + 5, y + 5, 10, 3, "#6a4f35"); px(x + 9, y + 8, 3, 3, "#6a4f35"); }
+    }
+    for (let i = 0; i < 22; i++) {
+      const y = Y(400 + RND(i) * 3200), x = (RND(i + 7) * W + t * (2 + RND(i + 3) * 3)) % (W + 60) - 30;
+      if (y > -8 && y < PH + 4) { px(x, y, 26, 3, "#fff"); px(x + 4, y - 3, 16, 3, "#fff"); px(x + 8, y - 5, 8, 2, "#fff"); px(x, y + 3, 26, 1, "#cfe3f5"); }
+    }
+    // Dragonspine peaks + snow
+    [[0.12, 1700, 40], [0.38, 2150, 54], [0.66, 1850, 44], [0.9, 1600, 36]].forEach(([fx, pa, hw]) => {
+      const cx = fx * W, top = Y(pa);
+      if (top > PH) return;
+      for (let x = Math.floor(cx - hw); x <= cx + hw; x++) {
+        const y = top + Math.abs(x - cx) * 1.15;
+        px(x, y, 1, PH - y, "#6b7f99"); px(x, y, 1, Math.min(7, PH - y), "#f4faff");
+      }
+    });
+    if (viewAlt > 500 && viewAlt < 2800) for (let i = 0; i < 50; i++) px((RND(i) * W + Math.sin(t + i) * 4 + W) % W, (RND(i + 5) * PH + t * 20) % PH, 1, 1, "#fff");
+    // Mondstadt ground, windmill, trees
+    { const gy = Y(0);
+      if (gy < PH + 30) {
+        for (let x = 0; x < W; x += 2) { const h = 12 + Math.sin(x * 0.05) * 5 + Math.sin(x * 0.13 + 1) * 3, y = gy - h; px(x, y, 2, PH - y, "#4f9d3f"); px(x, y, 2, 2, "#7fd06a"); }
+        px(0, gy + 6, W, PH, "#3a2a1c");
+        const wx = W * 0.72, wy = gy - 26;
+        px(wx, wy + 4, 10, 22, "#c9a36b"); px(wx - 2, wy, 14, 5, "#b23a48");
+        for (let k = 0; k < 4; k++) { const a = t * 1.2 + k * Math.PI / 2; for (let r = 2; r < 15; r++) px(wx + 5 + Math.cos(a) * r, wy + 4 + Math.sin(a) * r, 1, 1, "#fff"); }
+        [0.15, 0.3, 0.52, 0.9].forEach((fx, i) => { const tx = fx * W, ty = gy - 15 - (i % 2) * 3; px(tx, ty, 3, 10, "#6b4a2b"); px(tx - 4, ty - 8, 11, 9, "#2f7d32"); px(tx - 2, ty - 11, 7, 4, "#3f9a43"); });
+      } }
+    // Abyss: dark vortex + red eyes
+    { const cx = W * 0.5, cy = Y(6600);
+      if (cy > -50 && cy < PH + 50) {
+        [10, 20, 30, 40].forEach(r => { const n = Math.floor(r * 1.5); for (let k = 0; k < n; k++) { const a = t * (0.5 - r * 0.004) + k * 6.2832 / n; px(cx + Math.cos(a) * r, cy + Math.sin(a) * r * 0.6, 1, 1, r % 20 ? "#b03060" : "#6a2fa0"); } });
+        for (let i = 0; i < 6; i++) if (Math.floor(t + i * 2) % 5) { const ex = RND(i + 40) * W, ey = Y(6300 + RND(i + 50) * 700); px(ex, ey, 2, 1, "#ff3b5c"); px(ex + 4, ey, 2, 1, "#ff3b5c"); }
+      } }
+    // avatar: pixel gem with flapping wings and a trail
+    { const ax = Math.round(W * 0.18), ay = Math.round(PH * 0.6 + Math.sin(t * 3) * 1.5), flap = Math.floor(t * 6) % 2;
+      for (let i = 0; i < 6; i++) px(ax + 3, ay + 8 + i * 3, 1, 1, `rgba(77,238,234,${1 - i / 6})`);
+      GEM.forEach((row, j) => [...row].forEach((ch, i) => { if (ch !== ".") px(ax + i, ay + j, 1, 1, ch === "c" ? "#4deeea" : "#ffffff"); }));
+      px(ax - 3, ay + 2 - flap, 3, 1, "#bfeaff"); px(ax + 7, ay + 2 - flap, 3, 1, "#bfeaff");
+    }
+    // ruler (full resolution): ticks, altitude labels, zone names, YOU marker
+    rctx.clearRect(0, 0, 90, innerHeight);
+    rctx.font = "10px monospace"; rctx.textBaseline = "middle";
+    for (let a = Math.floor((viewAlt - PH * 0.6 * MPP) / 100) * 100; a <= viewAlt + PH * 0.4 * MPP; a += 100) {
+      if (a < 0) continue;
+      const y = Y(a) * f, big = a % 500 === 0;
+      rctx.fillStyle = "rgba(255,255,255,.55)"; rctx.fillRect(90 - (big ? 12 : 6), y, big ? 12 : 6, 1);
+      if (big) { rctx.fillStyle = "rgba(255,255,255,.75)"; rctx.textAlign = "right"; rctx.fillText(a + "m", 90 - 16, y); }
+    }
+    rctx.textAlign = "right"; rctx.fillStyle = "rgba(255,255,255,.5)";
+    ZONES.forEach(z => { const y = Y(z.from) * f; if (y > 0 && y < innerHeight) rctx.fillText(z.name.toLowerCase() + " \u2500", 90 - 16, y - 8); });
+    const yy = PH * 0.6 * f; rctx.fillStyle = "#ff5b7f"; rctx.textAlign = "left"; rctx.fillText("\u25b8YOU", 4, yy); rctx.fillRect(40, yy, 50, 1);
+    drawTierLines(now, f, Y);
+  }
+  requestAnimationFrame(pixelFrame);
+
+  // ================= Genshin rank lines (like Krillion's tier lines) =================
+  const RANKS = [
+    { name: "NEWBIE", from: 110, color: "#38bdf8" },
+    { name: "VISION BEARER", from: 480, color: "#c084fc" },
+    { name: "ARCHON", from: 800, color: "#fde047" },
+    { name: "FOUR SHADES", from: 900, color: "#ff9f43" },
+    { name: "DESCENDER", from: 955, color: "#4deeea" }
+  ];
+  function rankOf(points) { let r = null; for (const k of RANKS) if (points >= k.from) r = k; return r; }
+  const tcv = $("tier-canvas"), tctx = tcv.getContext("2d");
+  const fitTier = () => { tcv.width = innerWidth; tcv.height = innerHeight; };
+  addEventListener("resize", fitTier); fitTier();
+  let revealAt = 0;
+  function drawTierLines(now, f, Y) {
+    tctx.clearRect(0, 0, tcv.width, tcv.height);
+    if (gameState.phase !== "REVEAL" || !lastReveal) { revealAt = 0; return; }
+    if (!revealAt) revealAt = now;
+    const fade = Math.min(1, (now - revealAt) / 500), x1 = innerWidth * 0.3, x2 = innerWidth * 0.7;
+    tctx.font = "bold 12px monospace"; tctx.textBaseline = "bottom"; tctx.textAlign = "right";
+    RANKS.forEach(r => {
+      const y = Y(lastReveal.prev + r.from) * f;
+      if (y < 0 || y > innerHeight) return;
+      const hit = lastReveal.rank && lastReveal.rank.name === r.name;
+      tctx.globalAlpha = fade * (hit ? 1 : 0.5);
+      tctx.strokeStyle = r.color; tctx.fillStyle = r.color; tctx.lineWidth = hit ? 2 : 1;
+      tctx.setLineDash([6, 5]); tctx.beginPath(); tctx.moveTo(x1, y); tctx.lineTo(x2, y); tctx.stroke(); tctx.setLineDash([]);
+      tctx.fillText(r.name + " \u00b7 " + r.from, x2, y - 4);
+    });
+    // answer label beside the avatar, like Krillion's "SCISSORS" tag
+    const miss = !lastReveal.name, col = miss ? "#ef4444" : (lastReveal.rank ? lastReveal.rank.color : "#38bdf8");
+    const text = miss ? "\u2715 " + (lastReveal.raw || "no answer") : "\u201c" + lastReveal.name + "\u201d \u25b2";
+    const ax = innerWidth * 0.18 + 34, ay = PH * 0.6 * f + 10, tw = tctx.measureText(text).width + 16;
+    tctx.globalAlpha = fade; tctx.fillStyle = "rgba(8,16,40,.88)"; tctx.fillRect(ax, ay - 12, tw, 22);
+    tctx.strokeStyle = col; tctx.lineWidth = 1; tctx.setLineDash([]); tctx.strokeRect(ax, ay - 12, tw, 22);
+    tctx.fillStyle = col; tctx.textAlign = "left"; tctx.textBaseline = "middle"; tctx.fillText(text, ax + 8, ay - 1);
+    tctx.globalAlpha = 1;
+  }
+
   showPhaseScreen("START");
   updateHudAndDepthVisuals();
   </script>
