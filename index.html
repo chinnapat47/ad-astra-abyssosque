@@ -9,7 +9,7 @@
   <!-- Google Fonts: Cinzel, Plus Jakarta Sans, JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Silkscreen:wght@400;700&family=VT323&display=swap" rel="stylesheet">
   
   <script>
     tailwind.config = {
@@ -17,9 +17,9 @@
       theme: {
         extend: {
           fontFamily: {
-            cinzel: ['Cinzel', 'serif'],
-            sans: ['Plus Jakarta Sans', 'sans-serif'],
-            mono: ['JetBrains Mono', 'monospace'],
+            cinzel: ['"Press Start 2P"', 'monospace'],
+            sans: ['VT323', 'monospace'],
+            mono: ['Silkscreen', 'monospace'],
           },
           colors: {
             abyss: {
@@ -197,6 +197,59 @@
     body.crunch #crunch-vignette { display: block; animation: crunchPulse var(--beat, .9s) ease-in-out infinite; }
     body.crunch #timer-bar { background: linear-gradient(90deg,#ef4444,#f97316) !important; box-shadow: 0 0 20px #ef4444 !important; }
     @media (prefers-reduced-motion: reduce) { body.crunch #crunch-vignette { animation: none; opacity: .7; } }
+    #primogem-track { display: none !important; }
+  </style>
+
+  <style id="pixel-skin">
+    :root{--ink:#050813;--panel:#0b1330;--cy:#4deeea;--pk:#ff5b7f;--gd:#fde047}
+    html,body,*{-webkit-font-smoothing:none;font-smooth:never}
+    body{font-family:'VT323',monospace}
+    p{font-size:clamp(17px,1.7vw,23px)!important;line-height:1.2!important;letter-spacing:.02em}
+    #reveal-flavor{font-style:normal!important}
+    .font-mono{font-family:'Silkscreen',monospace!important;letter-spacing:.1em}
+    .font-cinzel,input.font-cinzel{font-family:'Press Start 2P',monospace!important;letter-spacing:.03em!important;line-height:1.45!important}
+    [class*="rounded"]{border-radius:0!important}
+    /* title: RGB split like Krillion */
+    #screen-start h1{font-size:clamp(22px,4.4vw,54px)!important;color:#fff;text-shadow:-4px 0 var(--cy),4px 0 var(--pk)!important}
+    #prompt-title{font-size:clamp(13px,2.3vw,28px)!important}
+    #reveal-headline{font-size:clamp(18px,3.4vw,42px)!important}
+    #summary-abyss-floor{font-size:clamp(14px,2.6vw,30px)!important}
+    #answer-input{font-size:clamp(14px,2.2vw,26px)!important}
+    [class*="title-glow"]{text-shadow:3px 3px 0 rgba(0,0,0,.6)!important}
+    #screen-start h1{text-shadow:-4px 0 var(--cy),4px 0 var(--pk)!important}
+    /* stepped-corner pixel panels */
+    .hud-glass,.hud-glass-gold,.action-btn,#screen-start span[class*="border"]{
+      --c:3px;clip-path:polygon(0 var(--c),var(--c) var(--c),var(--c) 0,calc(100% - var(--c)) 0,calc(100% - var(--c)) var(--c),100% var(--c),100% calc(100% - var(--c)),calc(100% - var(--c)) calc(100% - var(--c)),calc(100% - var(--c)) 100%,var(--c) 100%,var(--c) calc(100% - var(--c)),0 calc(100% - var(--c)))}
+    .hud-glass,.hud-glass-gold{background:rgba(5,10,30,.9)!important;backdrop-filter:none!important;border:3px solid var(--cy)!important;box-shadow:inset -3px -3px 0 rgba(0,0,0,.5),inset 3px 3px 0 rgba(255,255,255,.1)!important}
+    .hud-glass-gold{border-color:#d3bc8e!important}
+    .action-btn{background:var(--ink)!important;border:3px solid var(--cy)!important;box-shadow:inset -4px -4px 0 rgba(0,0,0,.55),inset 4px 4px 0 rgba(77,238,234,.18)!important;transition:none!important;font-size:clamp(10px,1.3vw,15px)!important;letter-spacing:.12em!important}
+    .action-btn:hover{background:var(--cy)!important;color:var(--ink)!important;border-color:#fff!important;transform:none!important}
+    .action-btn:active{transform:translateY(3px)!important}
+    #bottom-action-btn{min-width:min(88vw,600px);padding-top:20px!important;padding-bottom:20px!important;border-width:4px!important}
+    .abyss-input{border-bottom:4px solid #d3bc8e!important;box-shadow:none!important}
+    .abyss-input:focus{border-bottom-color:var(--cy)!important;box-shadow:none!important}
+    #hud-pips>div{height:10px!important;width:clamp(18px,3vw,36px)!important;border-radius:0!important;box-shadow:inset 0 -3px 0 rgba(0,0,0,.35)!important}
+    #timer-container{height:10px!important}#timer-bar{background:repeating-linear-gradient(90deg,var(--cy) 0 10px,#7ff5f2 10px 12px)!important;box-shadow:none!important}
+    ::-webkit-scrollbar-thumb{border-radius:0}
+    /* CRT scanlines + vignette */
+    body::after{content:"";position:fixed;inset:0;z-index:60;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.14) 0 1px,transparent 1px 3px),radial-gradient(ellipse at 50% 50%,transparent 60%,rgba(0,0,0,.35))}
+    @media (prefers-reduced-motion:reduce){body::after{opacity:.5}}
+
+    /* ---- readability pass ---- */
+    #screen-start,#screen-play,#screen-reveal,#screen-summary{background:rgba(5,10,30,.82);border:3px solid rgba(77,238,234,.55);padding:22px 26px!important;box-shadow:inset -3px -3px 0 rgba(0,0,0,.5),inset 3px 3px 0 rgba(255,255,255,.08);clip-path:polygon(0 4px,4px 4px,4px 0,calc(100% - 4px) 0,calc(100% - 4px) 4px,100% 4px,100% calc(100% - 4px),calc(100% - 4px) calc(100% - 4px),calc(100% - 4px) 100%,4px 100%,4px calc(100% - 4px),0 calc(100% - 4px))}
+    .text-slate-300,.text-slate-400,.text-slate-500,.text-slate-600,[class*="text-slate-300"]{color:#dbe7ff!important}
+    .text-celestia\/80,.text-celestia\/85{color:#4deeea!important}
+    ::placeholder{color:#a9bcdf!important;opacity:1!important}
+    body{text-shadow:1px 1px 0 rgba(0,0,0,.75)}
+    [class*="text-[10px]"]{font-size:11px!important}[class*="text-[11px]"]{font-size:12px!important}
+    #hud-depth,#hud-score{text-shadow:2px 2px 0 #000!important}
+    #ruler-canvas{background:linear-gradient(90deg,transparent,rgba(5,10,30,.6))}
+    #share-toast{background:#050a1e;padding:6px 10px;border:2px solid var(--cy)}
+    #menu-btn{display:none}body.in-game #menu-btn{display:inline-block}
+    #menu-btn{font-family:'Silkscreen',monospace;font-size:11px;letter-spacing:.1em;color:#fff;background:#050a1e;border:2px solid var(--pk);padding:3px 8px;margin-left:6px;cursor:pointer}
+    #menu-btn:hover{background:var(--pk);color:#050a1e}
+    #btn-return-menu{border-color:var(--pk)!important;color:#ffd0da!important}
+    #btn-return-menu:hover{background:var(--pk)!important;color:#050a1e!important}
   </style>
 </head>
 <body class="relative w-full h-full select-none overflow-hidden">
@@ -278,8 +331,9 @@
           ABYSSAL STANDBY
         </span>
         <button id="sound-toggle" title="Toggle Synth Audio" class="text-slate-400 hover:text-celestia transition-colors text-xs pointer-events-auto ml-1">
-          🔊
+          SND
         </button>
+        <button id="menu-btn" title="Back to main menu">MENU</button>
       </div>
     </div>
 
@@ -449,6 +503,7 @@
         <button id="btn-play-unlimited-again" class="px-4 py-2 rounded border border-genshinGold/40 hover:border-genshinGold font-mono text-xs tracking-[0.2em] text-genshinGold uppercase transition-colors">
           PLAY UNLIMITED DIVE ↻
         </button>
+        <button id="btn-return-menu" class="action-btn px-4 py-3 font-mono text-xs tracking-[0.2em] uppercase">◀ RETURN TO MENU</button>
       </div>
     </section>
 
@@ -2019,7 +2074,21 @@
     }, 700);
   });
   document.addEventListener("keydown", (e) => { if (e.key === "Enter" && !e.repeat && e.target !== elAnswerInput && gameState.phase === "REVEAL") nextStep(); });
-  $("sound-toggle").addEventListener("click", () => { audio.enabled = !audio.enabled; $("sound-toggle").textContent = audio.enabled ? "🔊" : "🔇"; });
+  $("sound-toggle").addEventListener("click", () => { audio.enabled = !audio.enabled; $("sound-toggle").textContent = audio.enabled ? "SND" : "OFF"; });
+
+
+  function goMenu() {
+    if (gameState.phase === "SUSPENSE") return;
+    if ((gameState.phase === "PLAY" || gameState.phase === "REVEAL") && !confirm("Leave this run and return to the menu? Your progress will be lost.")) return;
+    clearInterval(gameState.timerInterval); clearTimeout(fixTimer); ascent = null;
+    gameState.currentIndex = 0; gameState.totalScore = 0; gameState.history = []; gameState.prompts = [];
+    elAnswerInput.value = ""; document.body.classList.remove("crunch", "in-game");
+    showPhaseScreen("START"); updateHudAndDepthVisuals(); updateDailyNote();
+  }
+  $("btn-return-menu").addEventListener("click", goMenu);
+  $("menu-btn").addEventListener("click", goMenu);
+  const _sps = showPhaseScreen;
+  showPhaseScreen = function (ph) { _sps(ph); document.body.classList.toggle("in-game", ph !== "START"); };
 
   const fmtHMS = (s) => [Math.floor(s / 3600), Math.floor(s % 3600 / 60), s % 60].map(n => String(n).padStart(2, "0")).join(":");
   function updateDailyNote() {
@@ -2102,21 +2171,18 @@
 
   // Wish-style suspense: a star streaks upward and settles on the tier colour before the result shows
   function playSuspense(ev, done) {
-    if (reduceMotion) { done(); return; }
-    const t = ev.tierKey, box = $("suspense"), orb = $("suspense-orb"), beam = $("suspense-beam");
-    const dur = t === "MIRACLE" ? 1700 : t === "RARE_5" ? 1400 : t === "UNCOMMON_4" ? 1100 : t === "COMMON_3" ? 900 : 650;
+    const pts = ev.points, miss = pts <= 0;
+    const dur = reduceMotion ? 0 : (miss ? 1300 : Math.min(3400, 1500 + pts * 1.9));
+    if (!dur) { done(); return; }
     gameState.phase = "SUSPENSE";
     clearTimeout(fixTimer);
-    box.style.opacity = "1";
-    const finalC = t === "MISS" ? "#ef4444" : ev.colorHex, midC = t === "MISS" ? "#7f1d1d" : "#a78bfa";
-    orb.animate([
-      { bottom: "6%", transform: "translateX(-50%) scale(.5)", background: "#60a5fa", boxShadow: "0 0 30px 10px #60a5fa" },
-      { bottom: "34%", transform: "translateX(-50%) scale(.9)", background: midC, boxShadow: `0 0 50px 18px ${midC}`, offset: 0.6 },
-      { bottom: "50%", transform: "translateX(-50%) scale(1.6)", background: finalC, boxShadow: `0 0 90px 36px ${finalC}` }
-    ], { duration: dur, easing: "cubic-bezier(.3,.1,.2,1)", fill: "forwards" });
-    beam.animate([{ height: "0%", opacity: 0.2 }, { height: "52%", opacity: 0.9 }], { duration: dur, easing: "ease-out", fill: "forwards" });
-    [330, 392, 494, 587, 740].slice(0, t === "MISS" ? 2 : 5).forEach((f, i) => audio.playTone(f, "triangle", 0.28, 0.07, i * dur / 6000));
-    setTimeout(() => { box.style.opacity = "0"; done(); }, dur);
+    const prev = gameState.totalScore - pts;
+    ascent = { t0: performance.now(), dur, from: prev, to: gameState.totalScore, miss, lastZone: getZone(prev).name, banner: null };
+    const ui = [elScreenPlay, elBottomBtn, elTimerContainer];
+    ui.forEach(e => { e.style.visibility = "hidden"; });
+    if (miss) { audio.playTone(180, "sawtooth", 0.3, 0.08); audio.playTone(120, "sawtooth", 0.4, 0.08, 0.25); }
+    else for (let i = 0; i < 9; i++) audio.playTone(300 * Math.pow(1.12, i * 1.5), "triangle", 0.22, 0.06, (dur / 1000) * (i / 9) * 0.9);
+    setTimeout(() => { ascent = null; ui.forEach(e => { e.style.visibility = ""; }); done(); }, dur + 350);
   }
 
 
@@ -2140,21 +2206,36 @@
   const pw = $("pixel-world"), pctx = pw.getContext("2d"), rcv = $("ruler-canvas"), rctx = rcv.getContext("2d");
   const PH = 180, MPP = 8; // pixel rows on screen, metres per pixel row
   let PWID = 320, viewAlt = 0, lastPx = 0;
+  let ascent = null; // set while the Primogem is flying up after an answer
   function fitPixel() { PWID = Math.max(240, Math.round(PH * innerWidth / innerHeight)); pw.width = PWID; pw.height = PH; rcv.width = 90; rcv.height = innerHeight; pctx.imageSmoothingEnabled = false; }
   addEventListener("resize", fitPixel); fitPixel();
   const RND = (i) => { const x = Math.sin(i * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
+  const STAR = ["....c....", "....c....", "...cwc...", "..cwwwc..", "ccwwwwwcc", "..cwwwc..", "...cwc...", "....c....", "....c...."];
   const GEM = ["...c...", "..cwc..", ".cwwwc.", "cwwwwwc", ".cwwwc.", "..cwc..", "...c..."];
 
   function pixelFrame(now) {
     requestAnimationFrame(pixelFrame);
-    if (now - lastPx < 66) return; // ~15 fps for the retro feel
+    if (now - lastPx < (ascent ? 33 : 66)) return; // ~15 fps retro feel, ~30 fps during the flight
     lastPx = now;
     const t = now / 1000, W = PWID, f = innerHeight / PH;
-    viewAlt += (gameState.totalScore - viewAlt) * 0.06;
+    let ap = 0, arr = 0;
+    if (ascent) {
+      const el = now - ascent.t0;
+      ap = Math.max(0, Math.min(1, el / ascent.dur));
+      arr = Math.max(0, Math.min(1, (el - ascent.dur) / 350));
+      const e = ap < 0.5 ? 2 * ap * ap : 1 - Math.pow(-2 * ap + 2, 2) / 2;
+      viewAlt = ascent.miss ? ascent.from - 70 * Math.sin(Math.PI * ap) : ascent.from + (ascent.to - ascent.from) * e;
+      const zn = getZone(viewAlt).name;
+      if (zn !== ascent.lastZone) { ascent.banner = { text: zn, t: now }; ascent.lastZone = zn; audio.playTone(880, "sine", 0.4, 0.07); }
+    } else viewAlt += (gameState.totalScore - viewAlt) * 0.06;
     const Y = (a) => Math.round(PH * 0.6 - (a - viewAlt) / MPP);
     const px = (x, y, w, h, c) => { pctx.fillStyle = c; pctx.fillRect(Math.round(x), Math.round(y), w, h); };
-    // sky in 4-pixel bands, coloured by the altitude of each band
-    for (let y = 0; y < PH; y += 4) px(0, y, W, 4, `rgb(${skyAt(viewAlt + (PH * 0.6 - y) * MPP)[0]})`);
+    // sky: 4px bands with 2-row checker dither blending into the band above
+    for (let y = 0; y < PH; y += 4) {
+      const c = `rgb(${skyAt(viewAlt + (PH * 0.6 - y) * MPP)[0]})`; px(0, y, W, 4, c);
+      if (y > 0) { const p = `rgb(${skyAt(viewAlt + (PH * 0.6 - y + 4) * MPP)[0]})`; pctx.fillStyle = p;
+        for (let r = 0; r < 2; r++) for (let x = (r + (y >> 2)) & 1; x < W; x += 2) pctx.fillRect(x, y + r, 1, 1); }
+    }
     // stars (high up)
     for (let i = 0; i < 70; i++) {
       const y = Y(3000 + RND(i) * 4000);
@@ -2174,34 +2255,49 @@
         for (let i = 0; i < 5; i++) px(cx - 32 + i * 16, base - 20, 4, 20, "#fff3c4");
         px(cx - 36, base - 23, 72, 3, "#f4d77a");
       } }
-    // Teyvat sky: floating islands + clouds
+    // Teyvat sky: floating islands with waterfall + tree, shaded clouds
     for (let i = 0; i < 3; i++) {
-      const y = Y(2500 + i * 420), x = ((W * (0.2 + i * 0.3)) + t * 1.5) % (W + 40) - 20;
-      if (y > -12 && y < PH + 12) { px(x, y, 22, 3, "#6fbf5a"); px(x + 2, y + 3, 18, 2, "#8a6a47"); px(x + 5, y + 5, 10, 3, "#6a4f35"); px(x + 9, y + 8, 3, 3, "#6a4f35"); }
+      const y = Y(2500 + i * 420), x = Math.round(((W * (0.2 + i * 0.3)) + t * 1.5) % (W + 60) - 30);
+      if (y > -14 && y < PH + 14) {
+        px(x, y, 26, 2, "#9be07a"); px(x + 1, y + 2, 24, 2, "#5fae48");
+        for (let k = 0; k < 6; k++) px(x + 2 + k * 2, y + 4 + k, 22 - k * 4, 1, k % 2 ? "#6a4f35" : "#8a6a47");
+        px(x + 17, y - 5, 2, 5, "#6b4a2b"); px(x + 15, y - 9, 6, 5, "#2f7d32"); px(x + 16, y - 10, 4, 2, "#4fae52");
+        for (let k = 0; k < 14; k++) px(x + 6, y + 5 + k, 1, 1, (Math.floor(t * 8) + k) % 3 ? "#bfe9ff" : "#5aa7d8");
+      }
     }
-    for (let i = 0; i < 22; i++) {
-      const y = Y(400 + RND(i) * 3200), x = (RND(i + 7) * W + t * (2 + RND(i + 3) * 3)) % (W + 60) - 30;
-      if (y > -8 && y < PH + 4) { px(x, y, 26, 3, "#fff"); px(x + 4, y - 3, 16, 3, "#fff"); px(x + 8, y - 5, 8, 2, "#fff"); px(x, y + 3, 26, 1, "#cfe3f5"); }
+    const cloud = (x, y, s2) => { x = Math.round(x); px(x, y + 3 * s2, 26 * s2, 3 * s2, "#fff"); px(x + 4 * s2, y, 16 * s2, 4 * s2, "#fff"); px(x + 9 * s2, y - 2 * s2, 8 * s2, 3 * s2, "#fff"); px(x, y + 6 * s2, 26 * s2, 2 * s2, "#c9ddf0"); px(x + 3 * s2, y + 8 * s2, 18 * s2, s2, "#a9c4e0"); };
+    for (let i = 0; i < 18; i++) {
+      const y = Y(400 + RND(i) * 3200), sz = i % 4 === 0 ? 2 : 1, x = (RND(i + 7) * W + t * (2 + RND(i + 3) * 3) * sz) % (W + 70) - 40;
+      if (y > -12 && y < PH + 6) cloud(x, y, sz);
     }
-    // Dragonspine peaks + snow
+    // Dragonspine: lit left face, shaded right face, jagged snow caps
     [[0.12, 1700, 40], [0.38, 2150, 54], [0.66, 1850, 44], [0.9, 1600, 36]].forEach(([fx, pa, hw]) => {
-      const cx = fx * W, top = Y(pa);
+      const cx = Math.round(fx * W), top = Y(pa);
       if (top > PH) return;
-      for (let x = Math.floor(cx - hw); x <= cx + hw; x++) {
-        const y = top + Math.abs(x - cx) * 1.15;
-        px(x, y, 1, PH - y, "#6b7f99"); px(x, y, 1, Math.min(7, PH - y), "#f4faff");
+      for (let x = cx - hw; x <= cx + hw; x++) {
+        const y = Math.round(top + Math.abs(x - cx) * 1.15 + (RND(x) > 0.8 ? 1 : 0)), L = x <= cx;
+        px(x, y, 1, PH - y, L ? "#7388a6" : "#46597a");
+        px(x, y + 9 + ((x * 5) % 4), 1, 1, L ? "#5b6f8c" : "#33445f");
+        px(x, y, 1, Math.min(6 + (x % 3) * 2 + (L ? 1 : 0), PH - y), L ? "#ffffff" : "#c9def2");
       }
     });
     if (viewAlt > 500 && viewAlt < 2800) for (let i = 0; i < 50; i++) px((RND(i) * W + Math.sin(t + i) * 4 + W) % W, (RND(i + 5) * PH + t * 20) % PH, 1, 1, "#fff");
-    // Mondstadt ground, windmill, trees
+    // Mondstadt: far + near hills, windmill, round trees, Cecilia flowers, drifting dandelion seeds
     { const gy = Y(0);
       if (gy < PH + 30) {
-        for (let x = 0; x < W; x += 2) { const h = 12 + Math.sin(x * 0.05) * 5 + Math.sin(x * 0.13 + 1) * 3, y = gy - h; px(x, y, 2, PH - y, "#4f9d3f"); px(x, y, 2, 2, "#7fd06a"); }
-        px(0, gy + 6, W, PH, "#3a2a1c");
-        const wx = W * 0.72, wy = gy - 26;
-        px(wx, wy + 4, 10, 22, "#c9a36b"); px(wx - 2, wy, 14, 5, "#b23a48");
-        for (let k = 0; k < 4; k++) { const a = t * 1.2 + k * Math.PI / 2; for (let r = 2; r < 15; r++) px(wx + 5 + Math.cos(a) * r, wy + 4 + Math.sin(a) * r, 1, 1, "#fff"); }
-        [0.15, 0.3, 0.52, 0.9].forEach((fx, i) => { const tx = fx * W, ty = gy - 15 - (i % 2) * 3; px(tx, ty, 3, 10, "#6b4a2b"); px(tx - 4, ty - 8, 11, 9, "#2f7d32"); px(tx - 2, ty - 11, 7, 4, "#3f9a43"); });
+        for (let x = 0; x < W; x++) { const y = Math.round(gy - 22 - Math.sin(x * 0.03 + 2) * 7 - Math.sin(x * 0.09) * 2); px(x, y, 1, PH - y, "#3d8a52"); px(x, y, 1, 1, "#5fb36a"); }
+        for (let x = 0; x < W; x++) { const y = Math.round(gy - 12 - Math.sin(x * 0.05) * 5 - Math.sin(x * 0.13 + 1) * 3); px(x, y, 1, PH - y, "#4f9d3f"); px(x, y, 1, 1, "#9be07a"); if (x % 5 === 0) px(x, y + 1, 1, 1, "#7fd06a"); }
+        px(0, gy + 6, W, PH, "#4a3322"); for (let x = 0; x < W; x += 3) px(x, gy + 6 + (x % 7), 1, 1, "#6b4a2b");
+        const wx = Math.round(W * 0.72), wy = gy - 30;
+        for (let r = 0; r < 26; r++) { const hw = 6 - Math.floor(r / 9); px(wx + 5 - hw, wy + 4 + r, hw * 2, 1, r % 4 === 0 ? "#a8844f" : "#c9a36b"); px(wx + 5 + hw - 1, wy + 4 + r, 1, 1, "#8a6a3f"); }
+        px(wx + 3, gy - 7, 4, 7, "#5b3a22"); px(wx + 4, gy - 9, 2, 2, "#5b3a22");
+        px(wx + 1, wy, 8, 2, "#d9485a"); px(wx + 2, wy - 2, 6, 2, "#b23a48"); px(wx + 3, wy - 4, 4, 2, "#8c2d3a");
+        for (let k = 0; k < 4; k++) { const a = t * 1.2 + k * Math.PI / 2, ca = Math.cos(a), sa = Math.sin(a);
+          for (let r = 2; r < 17; r++) { px(wx + 5 + ca * r, wy + 3 + sa * r, 1, 1, "#7a5a33"); if (r > 5) for (let o = 1; o <= 2; o++) px(wx + 5 + ca * r - sa * o, wy + 3 + sa * r + ca * o, 1, 1, "#f3f6fb"); } }
+        px(wx + 4, wy + 2, 3, 3, "#fde047");
+        [0.1, 0.3, 0.5, 0.9].forEach((fx, i) => { const tx = Math.round(fx * W), ty = gy - 15 - (i % 2) * 3; px(tx, ty, 3, 10, "#6b4a2b"); px(tx - 4, ty - 8, 11, 9, "#2f7d32"); px(tx - 2, ty - 11, 7, 4, "#3f9a43"); px(tx - 3, ty - 6, 3, 2, "#58b85c"); px(tx + 3, ty - 3, 4, 2, "#24602a"); });
+        for (let i = 0; i < 14; i++) px(RND(i + 600) * W, gy - 6 + (i % 4), 1, 1, i % 3 ? "#7fd0ff" : "#ffffff");
+        if (viewAlt < 900) for (let i = 0; i < 10; i++) px((RND(i + 700) * W + t * 6 + Math.sin(t + i) * 3) % W, (gy - 8 - ((t * 5 + i * 17) % 60)), 1, 1, "#fff");
       } }
     // Abyss: dark vortex + red eyes
     { const cx = W * 0.5, cy = Y(6600);
@@ -2209,25 +2305,30 @@
         [10, 20, 30, 40].forEach(r => { const n = Math.floor(r * 1.5); for (let k = 0; k < n; k++) { const a = t * (0.5 - r * 0.004) + k * 6.2832 / n; px(cx + Math.cos(a) * r, cy + Math.sin(a) * r * 0.6, 1, 1, r % 20 ? "#b03060" : "#6a2fa0"); } });
         for (let i = 0; i < 6; i++) if (Math.floor(t + i * 2) % 5) { const ex = RND(i + 40) * W, ey = Y(6300 + RND(i + 50) * 700); px(ex, ey, 2, 1, "#ff3b5c"); px(ex + 4, ey, 2, 1, "#ff3b5c"); }
       } }
-    // avatar: pixel gem with flapping wings and a trail
-    { const ax = Math.round(W * 0.18), ay = Math.round(PH * 0.6 + Math.sin(t * 3) * 1.5), flap = Math.floor(t * 6) % 2;
-      for (let i = 0; i < 6; i++) px(ax + 3, ay + 8 + i * 3, 1, 1, `rgba(77,238,234,${1 - i / 6})`);
-      GEM.forEach((row, j) => [...row].forEach((ch, i) => { if (ch !== ".") px(ax + i, ay + j, 1, 1, ch === "c" ? "#4deeea" : "#ffffff"); }));
-      px(ax - 3, ay + 2 - flap, 3, 1, "#bfeaff"); px(ax + 7, ay + 2 - flap, 3, 1, "#bfeaff");
+    // avatar: pixel Primogem star. Resting: floats at the left. After an answer: flies up through the whole world.
+    { const bump = ascent ? Math.min(1, Math.min(ap, 1 - ap) * 6) : 0, S = ascent ? 2 : 1;
+      const ax = Math.round(W * (0.18 + 0.32 * bump)), ay = Math.round(PH * 0.6 + (ascent ? 0 : Math.sin(t * 3) * 1.5));
+      const speed = ascent && !ascent.miss ? Math.sin(Math.PI * ap) : 0;
+      const miss = ascent && ascent.miss, col = miss ? "#ef4444" : "#ff5b7f", rgb = miss ? "239,68,68" : "255,120,150";
+      for (let i = 0; i < 26 * speed; i++) px(RND(i + 300) * W, (RND(i + 400) * PH + t * 260) % PH, 1, 4 + Math.floor(speed * 10), "rgba(255,255,255,.35)");
+      const tl = ascent ? 10 + Math.floor(speed * 26) : 6;
+      for (let i = 1; i <= tl; i++) px(ax + 4 * S + Math.round(Math.sin(t * 9 + i) * speed * 2), ay + 9 * S + i * 2, S, 2, `rgba(${rgb},${(1 - i / tl) * 0.9})`);
+      STAR.forEach((row, j) => [...row].forEach((ch, i) => { if (ch !== ".") px(ax + i * S, ay + j * S, S, S, ch === "c" ? col : "#ffffff"); }));
+      if (arr > 0 && !miss) for (let i = 0; i < 20; i++) { const a = i * 0.314 + t * 3, r = 8 + arr * 36; px(ax + 4 * S + Math.cos(a) * r, ay + 4 * S + Math.sin(a) * r, 2, 2, `rgba(255,244,176,${1 - arr})`); }
     }
     // ruler (full resolution): ticks, altitude labels, zone names, YOU marker
     rctx.clearRect(0, 0, 90, innerHeight);
-    rctx.font = "10px monospace"; rctx.textBaseline = "middle";
+    rctx.font = "8px Silkscreen, monospace"; rctx.textBaseline = "middle"; rctx.shadowColor = "#000"; rctx.shadowOffsetX = 1; rctx.shadowOffsetY = 1;
     for (let a = Math.floor((viewAlt - PH * 0.6 * MPP) / 100) * 100; a <= viewAlt + PH * 0.4 * MPP; a += 100) {
       if (a < 0) continue;
       const y = Y(a) * f, big = a % 500 === 0;
       rctx.fillStyle = "rgba(255,255,255,.55)"; rctx.fillRect(90 - (big ? 12 : 6), y, big ? 12 : 6, 1);
-      if (big) { rctx.fillStyle = "rgba(255,255,255,.75)"; rctx.textAlign = "right"; rctx.fillText(a + "m", 90 - 16, y); }
+      if (big) { rctx.fillStyle = "#ffffff"; rctx.textAlign = "right"; rctx.fillText(a + "m", 90 - 16, y); }
     }
-    rctx.textAlign = "right"; rctx.fillStyle = "rgba(255,255,255,.5)";
+    rctx.textAlign = "right"; rctx.fillStyle = "#e6f0ff";
     ZONES.forEach(z => { const y = Y(z.from) * f; if (y > 0 && y < innerHeight) rctx.fillText(z.name.toLowerCase() + " \u2500", 90 - 16, y - 8); });
     const yy = PH * 0.6 * f; rctx.fillStyle = "#ff5b7f"; rctx.textAlign = "left"; rctx.fillText("\u25b8YOU", 4, yy); rctx.fillRect(40, yy, 50, 1);
-    drawTierLines(now, f, Y);
+    drawTierLines(now, f, Y, viewAlt);
   }
   requestAnimationFrame(pixelFrame);
 
@@ -2244,21 +2345,31 @@
   const fitTier = () => { tcv.width = innerWidth; tcv.height = innerHeight; };
   addEventListener("resize", fitTier); fitTier();
   let revealAt = 0;
-  function drawTierLines(now, f, Y) {
-    tctx.clearRect(0, 0, tcv.width, tcv.height);
-    if (gameState.phase !== "REVEAL" || !lastReveal) { revealAt = 0; return; }
+  function drawTierLines(now, f, Y, camAlt) {
+    tctx.clearRect(0, 0, tcv.width, tcv.height); tctx.shadowColor = "#000"; tctx.shadowOffsetX = 2; tctx.shadowOffsetY = 2;
+    if (ascent && ascent.banner) {
+      const k = (now - ascent.banner.t) / 1600;
+      if (k < 1) {
+        tctx.globalAlpha = Math.sin(Math.PI * Math.min(1, k * 1.2)); tctx.fillStyle = "#ffffff"; tctx.textAlign = "center"; tctx.textBaseline = "middle";
+        tctx.font = "10px Silkscreen, monospace"; tctx.fillText("ENTERING", innerWidth / 2, innerHeight * 0.26 - 34);
+        tctx.font = "22px 'Press Start 2P', monospace"; tctx.fillText(ascent.banner.text, innerWidth / 2, innerHeight * 0.26);
+        tctx.globalAlpha = 1;
+      }
+    }
+    if ((gameState.phase !== "REVEAL" && gameState.phase !== "SUSPENSE") || !lastReveal) { revealAt = 0; return; }
     if (!revealAt) revealAt = now;
     const fade = Math.min(1, (now - revealAt) / 500), x1 = innerWidth * 0.3, x2 = innerWidth * 0.7;
-    tctx.font = "bold 12px monospace"; tctx.textBaseline = "bottom"; tctx.textAlign = "right";
+    tctx.font = "9px Silkscreen, monospace"; tctx.textBaseline = "bottom"; tctx.textAlign = "right";
     RANKS.forEach(r => {
       const y = Y(lastReveal.prev + r.from) * f;
       if (y < 0 || y > innerHeight) return;
-      const hit = lastReveal.rank && lastReveal.rank.name === r.name;
-      tctx.globalAlpha = fade * (hit ? 1 : 0.5);
+      const passed = camAlt >= lastReveal.prev + r.from - 2, hit = (lastReveal.rank && lastReveal.rank.name === r.name) || (gameState.phase === "SUSPENSE" && passed);
+      tctx.globalAlpha = fade * (hit ? 1 : 0.8);
       tctx.strokeStyle = r.color; tctx.fillStyle = r.color; tctx.lineWidth = hit ? 2 : 1;
       tctx.setLineDash([6, 5]); tctx.beginPath(); tctx.moveTo(x1, y); tctx.lineTo(x2, y); tctx.stroke(); tctx.setLineDash([]);
-      tctx.fillText(r.name + " \u00b7 " + r.from, x2, y - 4);
+      tctx.fillText((passed ? "\u2713 " : "") + r.name + " \u00b7 " + r.from, x2, y - 4);
     });
+    if (gameState.phase !== "REVEAL") { tctx.globalAlpha = 1; return; }
     // answer label beside the avatar, like Krillion's "SCISSORS" tag
     const miss = !lastReveal.name, col = miss ? "#ef4444" : (lastReveal.rank ? lastReveal.rank.color : "#38bdf8");
     const text = miss ? "\u2715 " + (lastReveal.raw || "no answer") : "\u201c" + lastReveal.name + "\u201d \u25b2";
