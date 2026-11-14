@@ -384,7 +384,7 @@
 
       <div id="daily-status-note" class="mt-4 font-mono text-xs text-slate-400 tracking-wider"></div>
       <div id="menu-record" class="mt-2 font-mono text-xs text-wishGold tracking-widest"></div>
-      <div class="mt-3 font-mono text-[10px] text-slate-500 tracking-widest">v1.0 • UNOFFICIAL FAN GAME • NOT AFFILIATED WITH HOYOVERSE</div>
+      <div class="mt-3 font-mono text-[10px] text-slate-500 tracking-widest">Paimon pixel art by Mephistophelita • v1.0 • UNOFFICIAL FAN GAME • NOT AFFILIATED WITH HOYOVERSE</div>
     </section>
 
     <!-- 2. ACTIVE QUESTION PROMPT STAGE -->
@@ -2270,8 +2270,8 @@
   const STAR = ["....c....", "....c....", "...cwc...", "..cwwwc..", "ccwwwwwcc", "..cwwwc..", "...cwc...", "....c....", "....c...."];
   const GEM = ["...c...", "..cwc..", ".cwwwc.", "cwwwwwc", ".cwwwc.", "..cwc..", "...c..."];
 
-  const PAIM = ["....oooooo....", "...o......o...", "...hhhhhhhh...", "..hhhhhhhhhh..", "hhhsssssssshhh", "hghssessesshgh", "hghssessesshgh", "hghspsssspshgh", "..hhsssssshh..", "..dbbbbbbbbd..", ".dbbwwwwwwbbd.", ".dbwwwwwwwwbd.", "..dwwyyyywwd..", "...wwwwwwww...", "....yyyyyy....", "....yy..yy...."];
-  const PP = { o: "#f2a65a", h: "#f4f6ff", g: "#aeb6cf", s: "#fff0e0", e: "#2d2f6b", p: "#ffa8a0", b: "#3a5fae", d: "#15204a", w: "#ffffff", y: "#f2a65a" };
+  const PAIM = ["..........o............", ".........ooo...........", "..........o............", "..........o............", ".......ooooooo.........", "......o...o...o........", ".....o..wwowww.o.......", "......wwwwowwwww.......", ".....wwwwwowwwwww......", "...wwwwwwwwwwwwkww.....", "wwwwwwwwwwwwwwkkkw.....", ".wwwgwwpwwwgwwwkwww....", "..ggwwwqqwwwgwwkwww....", "..gwwwqqqqwwwppwwwww...", "..gwwwqkkqqwwkkpwgwww..", "..gwwwkgkqqqwkgkwwgg...", "..gwwwqwnqqqqnwqwwwwg..", "..gwwwpqqqqqqqqpwwwgg..", "...gwwgpqqqqqqpgwwgg...", "...gwwggppppppggwggg...", "....gwg..qqqq..gw.g....", "....gwg.bbbbbb.n.......", ".....nws.bbbb.ssn.....n", "...nnssss....ssssnnnnn.", "..nnnoossssssssoonnnn..", ".nnnqqossssssssoqqnn...", ".nn..qssssssssssqn.....", "..n...sossssssssnn.....", "...n..nooossooonnnn....", "......nnqq..qq.........", ".......ooo..ooo........", "........ss..ss........."];
+  const PP = {"w": "#f0fcfc", "g": "#c0c4cc", "s": "#fcf0d8", "q": "#fcd8c0", "p": "#de9084", "o": "#e4985a", "n": "#0c1e42", "k": "#000000", "b": "#4860b4"};
   function pixelFrame(now) {
     requestAnimationFrame(pixelFrame);
     if (now - lastPx < (ascent ? 33 : 66)) return; // ~15 fps retro feel, ~30 fps during the flight
@@ -2366,15 +2366,15 @@
       } }
     // avatar: pixel Primogem star. Resting: floats at the left. After an answer: flies up through the whole world.
     { const bump = ascent ? Math.min(1, Math.min(ap, 1 - ap) * 6) : 0, S = ascent ? 2 : 1;
-      const ax = Math.round(W * (0.18 + 0.32 * bump)), ay = Math.round(PH * 0.6 - 8 + (ascent ? 0 : Math.sin(t * 3) * 1.5));
+      const ax = Math.round(W * (0.06 + 0.32 * bump)), ay = Math.round(PH * 0.6 - 16 + (ascent ? 0 : Math.sin(t * 3) * 1.5));
       const speed = ascent && !ascent.miss ? Math.sin(Math.PI * ap) : 0;
       const miss = ascent && ascent.miss, col = miss ? "#ef4444" : "#ff5b7f", rgb = miss ? "239,68,68" : "255,120,150";
       for (let i = 0; i < 26 * speed; i++) px(RND(i + 300) * W, (RND(i + 400) * PH + t * 260) % PH, 1, 4 + Math.floor(speed * 10), "rgba(255,255,255,.35)");
       const tl = ascent ? 10 + Math.floor(speed * 26) : 6;
-      for (let i = 1; i <= tl; i++) px(ax + 7 + Math.round(Math.sin(t * 9 + i) * speed * 2), ay + 16 + i * 2, S, 2, `rgba(${rgb},${(1 - i / tl) * 0.9})`);
+      for (let i = 1; i <= tl; i++) px(ax + 11 + Math.round(Math.sin(t * 9 + i) * speed * 2), ay + 32 + i * 2, S, 2, `rgba(${rgb},${(1 - i / tl) * 0.9})`);
       [[1, 0], [-1, 0], [0, 1], [0, -1]].forEach(([dx, dy]) => PAIM.forEach((row, j) => [...row].forEach((c, i) => { if (c !== ".") px(ax + i + dx, ay + j + dy, 1, 1, "#0b1230"); })));
       PAIM.forEach((row, j) => [...row].forEach((c, i) => { if (c !== ".") px(ax + i, ay + j, 1, 1, PP[c]); }));
-      if (arr > 0 && !miss) for (let i = 0; i < 20; i++) { const a = i * 0.314 + t * 3, r = 8 + arr * 36; px(ax + 7 + Math.cos(a) * r, ay + 8 + Math.sin(a) * r, 2, 2, `rgba(255,244,176,${1 - arr})`); }
+      if (arr > 0 && !miss) for (let i = 0; i < 20; i++) { const a = i * 0.314 + t * 3, r = 8 + arr * 36; px(ax + 11 + Math.cos(a) * r, ay + 16 + Math.sin(a) * r, 2, 2, `rgba(255,244,176,${1 - arr})`); }
     }
     // ruler (full resolution): ticks, altitude labels, zone names, YOU marker
     rctx.clearRect(0, 0, 90, innerHeight);
@@ -2433,7 +2433,7 @@
     // answer label beside the avatar, like Krillion's "SCISSORS" tag
     const miss = !lastReveal.name, col = miss ? "#ef4444" : (lastReveal.rank ? lastReveal.rank.color : "#38bdf8");
     const text = miss ? "\u2715 " + (lastReveal.raw || "no answer") : "\u201c" + lastReveal.name + "\u201d \u25b2";
-    const ax = innerWidth * 0.18 + 16 * f, ay = PH * 0.6 * f + 10, tw = tctx.measureText(text).width + 16;
+    const ax = innerWidth * 0.06 + 26 * f, ay = PH * 0.6 * f + 10, tw = tctx.measureText(text).width + 16;
     tctx.globalAlpha = fade; tctx.fillStyle = "rgba(8,16,40,.88)"; tctx.fillRect(ax, ay - 12, tw, 22);
     tctx.strokeStyle = col; tctx.lineWidth = 1; tctx.setLineDash([]); tctx.strokeRect(ax, ay - 12, tw, 22);
     tctx.fillStyle = col; tctx.textAlign = "left"; tctx.textBaseline = "middle"; tctx.fillText(text, ax + 8, ay - 1);
