@@ -251,6 +251,35 @@
     #btn-return-menu{border-color:var(--pk)!important;color:#ffd0da!important}
     #btn-return-menu:hover{background:var(--pk)!important;color:#050a1e!important}
   </style>
+
+  <style id="mobile-fix">
+    html{-webkit-text-size-adjust:100%;touch-action:manipulation}
+    @media (max-width:1024px){
+      p{font-size:clamp(19px,2.6vw,24px)!important}
+      .font-mono{font-size:13px!important}
+      [class*="text-[10px]"]{font-size:12px!important}
+      #hud-depth{font-size:15px!important}#hud-score{font-size:17px!important}
+      .action-btn{min-height:48px;font-size:clamp(12px,1.8vw,16px)!important}
+      #answer-input{font-size:max(18px,2.2vw)!important}
+      #menu-btn,#sound-toggle{font-size:12px;padding:6px 10px;min-height:34px}
+    }
+    @media (max-width:640px){
+      header{flex-wrap:wrap;top:max(10px,env(safe-area-inset-top))!important;padding:0 10px!important;row-gap:6px}
+      header>div:nth-child(2){order:3;width:100%}
+      .hud-glass{padding:6px 10px!important}
+      #hud-depth{font-size:14px!important}
+      #app-stage{padding:112px 10px 100px!important;justify-content:flex-start!important;overflow-y:auto;-webkit-overflow-scrolling:touch}
+      #screen-start,#screen-play,#screen-reveal,#screen-summary{padding:16px 12px!important;margin-block:auto}
+      #screen-summary{max-height:none!important;overflow:visible!important}
+      #screen-start h1{font-size:clamp(20px,7.4vw,32px)!important}
+      #prompt-title{font-size:clamp(13px,4.4vw,20px)!important}
+      #reveal-headline{font-size:clamp(16px,5.4vw,26px)!important}
+      #summary-abyss-floor{font-size:clamp(13px,4.2vw,20px)!important}
+      #bottom-action-btn{width:calc(100vw - 24px);min-width:0!important;padding:16px 8px!important;font-size:13px!important;letter-spacing:.1em!important}
+      #hud-pips>div{width:20px!important}
+      #ruler-canvas{display:none}
+    }
+  </style>
 </head>
 <body class="relative w-full h-full select-none overflow-hidden">
 
@@ -2264,7 +2293,7 @@
   const PH = 180, MPP = 8; // pixel rows on screen, metres per pixel row
   let PWID = 320, viewAlt = 0, lastPx = 0;
   let ascent = null; // set while the Primogem is flying up after an answer
-  function fitPixel() { PWID = Math.max(240, Math.round(PH * innerWidth / innerHeight)); pw.width = PWID; pw.height = PH; rcv.width = 90; rcv.height = innerHeight; pctx.imageSmoothingEnabled = false; }
+  function fitPixel() { PWID = Math.max(72, Math.round(PH * innerWidth / innerHeight)); pw.width = PWID; pw.height = PH; rcv.width = 90; rcv.height = innerHeight; pctx.imageSmoothingEnabled = false; }
   addEventListener("resize", fitPixel); fitPixel();
   const RND = (i) => { const x = Math.sin(i * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
   const STAR = ["....c....", "....c....", "...cwc...", "..cwwwc..", "ccwwwwwcc", "..cwwwc..", "...cwc...", "....c....", "....c...."];
